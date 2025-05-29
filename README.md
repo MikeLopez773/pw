@@ -56,7 +56,7 @@ renewable-energy-management-app/
 │       ├── gestao.html
 │       ├── gestao_js.js
 │       ├── gestao_css.css
-│       ├── Intalacao.html
+│       ├── instalacao.html
 │       └── instalacao_css.css
 ├── src/
 │   ├── app.js
@@ -65,7 +65,7 @@ renewable-energy-management-app/
 │   ├── controllers/
 │   │   ├── solarPanelController.js
 │   │   ├── energyMonitorController.js
-│   └── middleware/
+│   ├── middleware/
 │   │   ├── authMiddleware.js
 │   │   ├── roleMiddleware.js
 │   ├── models/
@@ -83,6 +83,8 @@ renewable-energy-management-app/
 ├── uploads/
 │   └── certificates/
 ```
+
+---
 
 ### Tecnologias
 
@@ -134,163 +136,21 @@ renewable-energy-management-app/
 
 2. **Instalação**:
    ```bash
-   git clone https://github.com/seu-repositorio/renewable-energy-management-app.git
+   git clone https://github.com/MikeLopez773/pw.git
    cd renewable-energy-management-app
    npm install
    ```
 
-### Principais Funcionalidades
-
-1. **Autenticação de Utilizador**: Os utilizadores podem registar-se e iniciar sessão utilizando JWT para sessões seguras.
-2. **Registo de Painéis Solares**: Os utilizadores podem registar as suas instalações de painéis solares.
-3. **Monitorização de Energia em Tempo Real**: Os utilizadores podem monitorizar a produção de energia através de uma API.
-4. **Contabilização de Créditos de Energia**: Os utilizadores podem acompanhar os seus créditos de energia com base na produção.
-
-### Código Exemplo
-
-#### 1. Configuração do Servidor (`server/server.js`)
-
-```javascript
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const authRoutes = require('./routes/auth');
-const panelRoutes = require('./routes/panels');
-const energyRoutes = require('./routes/energy');
-const { connectDB } = require('./config/db');
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-connectDB(); // Conectar ao MongoDB
-
-app.use(cors());
-app.use(bodyParser.json());
-app.use(express.static('public'));
-
-app.use('/api/auth', authRoutes);
-app.use('/api/panels', panelRoutes);
-app.use('/api/energy', energyRoutes);
-
-app.listen(PORT, () => console.log(`Servidor a correr em http://localhost:${PORT}`));
-```
-
-#### 2. Configuração da Base de Dados (`server/config/db.js`)
-
-```javascript
-const mongoose = require('mongoose');
-
-const connectDB = async () => {
-  try {
-    await mongoose.connect('mongodb://localhost:27017/renewable_energy', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('MongoDB conectado');
-  } catch (error) {
-    console.error('Erro na conexão ao MongoDB:', error);
-    process.exit(1);
-  }
-};
-
-module.exports = { connectDB };
-```
-
-#### 3. Modelo de Utilizador (`server/models/User.js`)
-
-```javascript
-const mongoose = require('mongoose');
-
-const UserSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  panels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Panel' }],
-});
-
-module.exports = mongoose.model('User', UserSchema);
-```
-
-#### 4. Rotas de Autenticação (`server/routes/auth.js`)
-
-```javascript
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const router = express.Router();
-const SECRET = 'your_jwt_secret'; // Usar variáveis de ambiente em produção
-
-router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ username, password: hashedPassword });
-  await user.save();
-  res.status(201).json({ message: 'Utilizador registado com sucesso' });
-});
-
-router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  const user = await User.findOne({ username });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(401).json({ message: 'Credenciais inválidas' });
-  }
-  const token = jwt.sign({ id: user._id }, SECRET, { expiresIn: '1h' });
-  res.json({ token });
-});
-
-module.exports = router;
-```
-
-#### 5. Modelo de Painel Solar (`server/models/Panel.js`)
-
-```javascript
-const mongoose = require('mongoose');
-
-const PanelSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  installationDate: { type: Date, required: true },
-  capacity: { type: Number, required: true }, // em kW
-  productionData: [{ timestamp: Date, production: Number }], // Dados em tempo real
-});
-
-module.exports = mongoose.model('Panel', PanelSchema);
-```
-
-#### 6. Rotas de Monitorização de Energia (`server/routes/energy.js`)
-
-```javascript
-const express = require('express');
-const Panel = require('../models/Panel');
-const router = express.Router();
-
-// Middleware para autenticar utilizador
-const authMiddleware = require('../middleware/authMiddleware');
-
-router.get('/:panelId', authMiddleware, async (req, res) => {
-  const panel = await Panel.findById(req.params.panelId);
-  if (!panel) return res.status(404).json({ message: 'Painel não encontrado' });
-  res.json(panel.productionData);
-});
-
-router.post('/:panelId/data', authMiddleware, async (req, res) => {
-  const { production } = req.body;
-  const panel = await Panel.findById(req.params.panelId);
-  if (!panel) return res.status(404).json({ message: 'Painel não encontrado' });
-  panel.productionData.push({ timestamp: new Date(), production });
-  await panel.save();
-  res.json({ message: 'Dados de produção adicionados' });
-});
-
-module.exports = router;
-```
+---
 
 ### Considerações de Segurança
 
 - **Variáveis de Ambiente**: Armazenar informações sensíveis como segredo JWT e strings de conexão da base de dados em variáveis de ambiente.
-- **Validação de Entrada**: Validar as entradas do utilizador para prevenir injeções SQL e outros ataques.
+- **Validação de Entrada**: Validar as entradas do utilizador para prevenir injeções e outros ataques.
 - **HTTPS**: Usar HTTPS para transmissão segura de dados.
 - **Limitação de Taxa**: Implementar limitação de taxa para prevenir abusos da API.
+
+---
 
 ### Usabilidade e Desempenho
 
@@ -298,13 +158,16 @@ module.exports = router;
 - **Cache**: Implementar estratégias de cache para dados frequentemente acedidos.
 - **Teste de Carga**: Realizar testes de carga para garantir que a aplicação pode suportar alto tráfego.
 
+---
+
 ### Escalabilidade e Manutenção
 
 - **Microserviços**: Considerar dividir a aplicação em microserviços para melhor escalabilidade.
 - **Documentação**: Manter uma documentação clara para a API e base de código.
 - **Teste**: Implementar testes unitários e de integração para garantir a qualidade do código.
 
+---
+
 ### Conclusão
 
-Esta estrutura de projeto e snippets de código fornecem uma base sólida para construir uma aplicação de gestão de energia renovável. Você pode expandir isso adicionando funcionalidades como papéis de utilizador, notificações e uma contabilização de créditos de energia mais detalhada. Mantenha sempre em mente a segurança, desempenho e experiência do utilizador enquanto desenvolve a aplicação.
-# pw
+Esta estrutura de projeto fornece uma base sólida para construir uma aplicação de gestão de energia renovável. Pode ser expandida com funcionalidades como papéis de utilizador, notificações e uma contabilização de créditos de energia mais detalhada. Mantenha sempre em mente a segurança, desempenho e experiência do utilizador enquanto desenvolve a aplicação.

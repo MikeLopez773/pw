@@ -26,8 +26,8 @@
             <!-- Campo de pesquisa manual -->
             <form id="monitorForm">
                 <div class="form-group">
-                    <label for="userId">ID do Cliente:</label>
-                    <input type="text" id="userId" name="userId" placeholder="Insira o ID do cliente" required>
+                    <label for="userId">ID do Cliente, email ou nome:</label>
+                    <input type="text" id="userId" name="userId" placeholder="Insira o ID, nome ou email do cliente" required>
                 </div>
                 <button type="submit">Ver Produção</button>
             </form>
@@ -35,34 +35,15 @@
             <div id="productionReadings" class="readings-container"></div>
         </section>
         
-        <!-- NOVA SECÇÃO: Gráficos -->
-        <section class="charts-section">
-            <h2>📊 Análise Visual</h2>
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <h3>Produção por Hora (Últimas 24h)</h3>
-                    <canvas id="productionChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <h3>Eficiência dos Painéis</h3>
-                    <canvas id="efficiencyChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <h3>Comparação de Clientes</h3>
-                    <canvas id="clientsChart"></canvas>
-                </div>
-            </div>
-        </section>
+        
         
         <!-- Secção de Lista de Clientes -->
         <section class="clients-section">
             <h2>Lista de Clientes</h2>
-            <div class="search-bar">
-                <input type="text" id="filterClients" placeholder="Filtrar por nome ou email...">
+            <div class="search-container">
+                <input type="text" id="filterClients" placeholder="Pesquisar por nome ou email..." style="width: 320px; padding: 10px; border-radius: 8px; border: 1.5px solid #b6d4fa; font-size: 1rem;">
             </div>
-            <div class="clients-grid" id="clientsGrid">
-                <p>Carregando clientes...</p>
-            </div>
+            <div id="clientsGrid"></div>
         </section>
         
         <section class="reports-section">
@@ -70,19 +51,19 @@
             <div class="reports-grid">
                 <div class="report-card">
                     <h3>Produção Total</h3>
-                    <p id="totalProduction">Carregando...</p>
+                    <span id="totalProduction"></span>
                 </div>
                 <div class="report-card">
                     <h3>Painéis Ativos</h3>
-                    <p id="activePanels">Carregando...</p>
+                    <span id="activePanels"></span>
                 </div>
                 <div class="report-card">
                     <h3>Eficiência Média</h3>
-                    <p id="averageEfficiency">Carregando...</p>
+                    <span id="averageEfficiency"></span>
                 </div>
                 <div class="report-card">
                     <h3>Produção Mais Recente</h3>
-                    <p id="latestProduction">Carregando...</p>
+                    <span id="latestProduction"></span>
                 </div>
             </div>
         </section>

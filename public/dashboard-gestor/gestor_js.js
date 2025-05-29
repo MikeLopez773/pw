@@ -35,12 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Filtro de clientes
+  // Filtro de clientes por nome ou email
   const filterInput = document.getElementById('filterClients');
   if (filterInput) {
     filterInput.addEventListener('input', (e) => {
       const query = e.target.value.toLowerCase();
-      const filteredClients = allClients.filter(client => 
+      const filteredClients = allClients.filter(client =>
         client.username.toLowerCase().includes(query) ||
         client.email.toLowerCase().includes(query)
       );
@@ -327,12 +327,9 @@ async function updateDashboardForClient(clientId) {
     });
     if (statsRes.ok) {
       const stats = await statsRes.json();
-      document.getElementById('totalProduction').textContent =
-        stats.totalProduction ? `${stats.totalProduction} kWh` : 'N/A';
-      document.getElementById('activePanels').textContent =
-        stats.activePanels || 'N/A';
-      document.getElementById('averageEfficiency').textContent =
-        stats.averageEfficiency ? `${stats.averageEfficiency}%` : 'N/A';
+      setTextById('totalProduction', stats.totalProduction ? `${stats.totalProduction} kWh` : 'N/A');
+      setTextById('activePanels', stats.activePanels || 'N/A');
+      setTextById('averageEfficiency', stats.averageEfficiency ? `${stats.averageEfficiency}%` : 'N/A');
     }
 
     // 2. Produção mais recente do cliente
@@ -354,14 +351,14 @@ async function updateDashboardForClient(clientId) {
               <span class="value">${r.value} kWh</span>
             </div>`
           ).join('');
+
+        // Só chama updateChartsForClient se prodData existir
+        updateChartsForClient(clientId, prodData);
       } else {
         document.getElementById('latestProduction').textContent = 'Sem dados';
         document.getElementById('productionReadings').innerHTML = '<h3>Sem leituras disponíveis para este cliente.</h3>';
       }
     }
-
-    // NOVO: Atualizar gráficos com dados do cliente
-    updateChartsForClient(clientId, prodData);
 
     // Guardar último cliente pesquisado
     sessionStorage.setItem('lastClientId', clientId);
@@ -386,14 +383,9 @@ async function loadDashboardGeneral() {
     if (statsRes.ok) {
       const stats = await statsRes.json();
 
-      document.getElementById('totalProduction').textContent =
-        stats.totalProduction ? `${stats.totalProduction} kWh` : 'N/A';
-
-      document.getElementById('activePanels').textContent =
-        stats.activePanels || 'N/A';
-
-      document.getElementById('averageEfficiency').textContent =
-        stats.averageEfficiency ? `${stats.averageEfficiency}%` : 'N/A';
+      setTextById('totalProduction', stats.totalProduction ? `${stats.totalProduction} kWh` : 'N/A');
+      setTextById('activePanels', stats.activePanels || 'N/A');
+      setTextById('averageEfficiency', stats.averageEfficiency ? `${stats.averageEfficiency}%` : 'N/A');
     }
 
     // Buscar produção mais recente do cliente pesquisado
@@ -404,12 +396,10 @@ async function loadDashboardGeneral() {
       });
       if (prodRes.ok) {
         const prodData = await prodRes.json();
-        if (prodData.readings && prodData.readings.length) {
-          document.getElementById('latestProduction').textContent =
-            `${prodData.readings[0].value} kWh (${new Date(prodData.readings[0].timestamp).toLocaleString()})`;
-        } else {
-          document.getElementById('latestProduction').textContent = 'Sem dados';
-        }
+        setTextById('latestProduction', prodData.readings && prodData.readings.length
+          ? `${prodData.readings[0].value} kWh (${new Date(prodData.readings[0].timestamp).toLocaleString()})`
+          : 'Sem dados'
+        );
       } else {
         document.getElementById('latestProduction').textContent = 'Erro ao obter produção';
       }
@@ -465,3 +455,9 @@ function checkInactivity() {
 );
 updateLastActivity();
 setInterval(checkInactivity, 60000);
+
+// Função auxiliar para definir texto por ID
+function setTextById(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}

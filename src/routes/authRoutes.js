@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const auth = require('../middleware/authMiddleware');
+const authMiddleware = require('../middleware/authMiddleware');
 const { onlyAdmin } = require('../middleware/roleMiddleware');
 const { createTechnician, createUser, deleteUser, createGestor, resetOwnPassword, adminResetPassword, registerClient, adminCreateUser } = require('../controllers/authController');
 const speakeasy = require('speakeasy');
@@ -160,7 +160,7 @@ router.post('/verify-mfa', async (req, res) => {
 });
 
 // DAQUI PARA BAIXO: Rotas COM autenticação
-router.get('/setup-mfa', auth, async (req, res) => {
+router.get('/setup-mfa', authMiddleware, async (req, res) => {
   try {
     const secret = speakeasy.generateSecret({ length: 20 });
     const user = await User.findById(req.user.id);
@@ -189,7 +189,7 @@ router.get('/setup-mfa', auth, async (req, res) => {
   }
 });
 
-router.get('/check-mfa', auth, async (req, res) => {
+router.get('/check-mfa', authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
@@ -207,7 +207,7 @@ router.get('/check-mfa', auth, async (req, res) => {
   }
 });
 
-router.post('/users/:id/reset-mfa', auth, async (req, res) => {
+router.post('/users/:id/reset-mfa', authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -225,7 +225,7 @@ router.post('/users/:id/reset-mfa', auth, async (req, res) => {
 });
 
 // Rota para obter todos os usuários (COM autenticação)
-router.get('/users', auth, async (req, res) => {
+router.get('/users', authMiddleware, async (req, res) => {
   try {
     console.log('📋 Listando usuários para:', req.user.username, '- Role:', req.user.role);
     
@@ -255,7 +255,7 @@ router.get('/users', auth, async (req, res) => {
 });
 
 // Atualizar a rota de pesquisa para técnicos:
-router.get('/user/search', auth, async (req, res) => {
+router.get('/user/search', authMiddleware, async (req, res) => {
   try {
     const { q } = req.query;
     if (!q) {
@@ -304,7 +304,7 @@ router.get('/user/search', auth, async (req, res) => {
 });
 
 // ADICIONAR esta nova rota específica para técnicos:
-router.get('/clients', auth, async (req, res) => {
+router.get('/clients', authMiddleware, async (req, res) => {
   try {
     console.log('👥 Listando clientes para técnico:', req.user.username);
     
@@ -332,7 +332,7 @@ router.get('/clients', auth, async (req, res) => {
 });
 
 // Adicionar esta rota:
-router.get('/clients-for-gestor', auth, async (req, res) => {
+router.get('/clients-for-gestor', authMiddleware, async (req, res) => {
   try {
     console.log('👥 Listando clientes para gestor:', req.user.username);
     
@@ -355,12 +355,12 @@ router.get('/clients-for-gestor', auth, async (req, res) => {
 });
 
 // Outras rotas com autenticação
-router.post('/create-technician', auth, onlyAdmin, createTechnician);
-router.post('/create-user', auth, onlyAdmin, createUser);
-router.post('/create-gestor', auth, onlyAdmin, createGestor);
-router.delete('/user/:id', auth, onlyAdmin, deleteUser);
-router.post('/reset-password', auth, resetOwnPassword);
-router.post('/admin-reset-password/:id', auth, onlyAdmin, adminResetPassword);
+router.post('/create-technician', authMiddleware, onlyAdmin, createTechnician);
+router.post('/create-user', authMiddleware, onlyAdmin, createUser);
+router.post('/create-gestor', authMiddleware, onlyAdmin, createGestor);
+router.delete('/user/:id', authMiddleware, onlyAdmin, deleteUser);
+router.post('/reset-password', authMiddleware, resetOwnPassword);
+router.post('/admin-reset-password/:id', authMiddleware, onlyAdmin, adminResetPassword);
 
 // Endpoint para estatísticas do admin
 router.get('/stats', async (req, res) => {
@@ -384,7 +384,7 @@ router.get('/stats', async (req, res) => {
 });
 
 // Nova rota para logout
-router.post('/logout', auth, async (req, res) => {
+router.post('/logout', authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     if (user) {

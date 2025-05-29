@@ -13,10 +13,10 @@ const { connectDB } = require('./config');
 
 // Importar as rotas
 const authRoutes = require('./routes/authRoutes');
-const panelRoutes = require('./routes/panelRoutes');
 const monitoringRoutes = require('./routes/monitoringRoutes');
 const energyMonitorRoutes = require('./routes/energyMonitorRoutes');
 const creditRoutes = require('./routes/creditRoutes'); // ADICIONAR ESTA LINHA
+const solarPanelRoutes = require('./routes/solarPanelRoutes');
 
 // Inicializar a aplicação Express
 const app = express();
@@ -61,13 +61,14 @@ connectDB()
     console.log('   monitoringRoutes:', typeof monitoringRoutes);
     console.log('   energyMonitorRoutes:', typeof energyMonitorRoutes);
     console.log('   creditRoutes:', typeof creditRoutes);
+    console.log('   solarPanelRoutes:', typeof solarPanelRoutes);
 
     // Usar as rotas
     app.use('/api/auth', authRoutes);
-    app.use('/api/panels', panelRoutes);
     app.use('/api/monitoring', monitoringRoutes);
     app.use('/api/energy', energyMonitorRoutes);
     app.use('/api/credit', creditRoutes);
+    app.use('/api/panels', solarPanelRoutes);    // <-- Esta linha é obrigatória!
 
     console.log('✅ Rotas registradas:');
     console.log('   /api/auth - Autenticação');
@@ -75,8 +76,9 @@ connectDB()
     console.log('   /api/monitoring - Monitorização');
     console.log('   /api/energy - Histórico de energia');
     console.log('   /api/credit - Créditos de energia');
+    console.log('   /api/solar - Gestão de painéis solares');
 
-    // Rota catch-all para debug de rotas não encontradas
+    // Rota catch-all (deve ser a última)
     app.use('/api/*', (req, res) => {
       console.log('❌ Rota não encontrada:', req.originalUrl);
       res.status(404).json({ message: `Rota ${req.originalUrl} não encontrada` });
@@ -94,3 +96,10 @@ connectDB()
 
 // Exportar a app para testes ou uso externo (opcional)
 module.exports = app;
+
+router.post('/register', auth, async (req, res) => {
+  // ...
+  const { username, installationDate, ...rest } = req.body;
+  const user = await User.findOne({ username });
+  // ...
+});

@@ -57,4 +57,29 @@ router.get('/test', (req, res) => {
   res.json({ message: 'Rotas de painéis funcionando!' });
 });
 
+// Rota para registar um novo painel solar
+router.post('/register', auth, async (req, res) => {
+  try {
+    const { location, capacity, installationDate } = req.body;
+    // Usa o utilizador autenticado
+    const userId = req.user.id;
+
+    // Cria o painel associado ao utilizador autenticado
+    const newPanel = new SolarPanel({
+      user: userId,
+      location,
+      capacity,
+      installationDate,
+      validated: false
+    });
+
+    await newPanel.save();
+
+    res.status(201).json({ message: 'Painel registado com sucesso!', panel: newPanel });
+  } catch (error) {
+    console.error('❌ Erro ao registar painel:', error);
+    res.status(500).json({ message: 'Erro ao registar painel' });
+  }
+});
+
 module.exports = router;

@@ -1,0 +1,7 @@
+[
+{"_id":{"$oid":"682dc90ade5602482dc59f35"},"username":"admin","email":"admin@admin.pt","password":"$2a$10$haWJ5LmYi.SWigO6H4LgtucU3IH.omP2q/hde4T5kroMIQo4UF6PC","role":"admin","mfa":{"secret":"NF3TAXJSEMZWSW2CHBAFQUJ7PBJGMODTONWDC5DTNA3TORCXOY5A","enabled":true},"__v":1,"panels":[],"isLoggedIn":true},
+{"_id":{"$oid":"682dcab3625c8f8fe90ed338"},"username":"tecnico","password":"$2a$10$PTbrTPs/a.ECW./qtKP6suNIvYFkQ1e8zLJt7PpwygmLrNkalymJW","email":"tecnico@tecnico.pt","role":"tecnico","panels":[],"__v":0,"mfa":{"enabled":false}},
+{"_id":{"$oid":"682e0e436ccf478b39fe9389"},"username":"gestor","password":"$2a$10$zx2Rv6HM2vm3pieGaXBH6eMknfvW/kkMjlT5lsMgkUpRuaLT5MBL.","email":"gestor@gestor.pt","role":"gestor","panels":[],"mfa":{"enabled":false},"__v":0},
+{"_id":{"$oid":"682e43dbb37d9430e1d0f541"},"username":"cliente","password":"$2a$10$7USj4IVSy1FQ/i88W0apv.P.c2dMG4OJvVjuh0NX60Y9BCvswpN.i","email":"cliente@cliente.pt","role":"cliente","panels":[],"mfa":{"enabled":false},"__v":0,"isLoggedIn":true}
+]
+

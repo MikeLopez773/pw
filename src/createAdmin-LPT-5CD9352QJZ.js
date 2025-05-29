@@ -24,7 +24,7 @@ async function createUsers() {
   for (const userData of users) {
     const existing = await User.findOne({ username: userData.username });
     if (existing) {
-      console.log(`Utilizador ${userData.username} já existe.`);
+      console.log(`Usuário ${userData.username} já existe.`);
       continue;
     }
     const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -34,14 +34,13 @@ async function createUsers() {
       role: userData.role,
     });
     await user.save();
-    console.log(`Utilizador ${userData.username} criado com sucesso!`);
+    console.log(`Usuário ${userData.username} criado com sucesso!`);
   }
 
-  await mongoose.disconnect();
+  process.exit(0);
 }
 
 createUsers().catch(err => {
-  console.error('Erro ao criar utilizadores:', err);
-  mongoose.disconnect();
+  console.error('Erro ao criar usuários:', err);
   process.exit(1);
 });

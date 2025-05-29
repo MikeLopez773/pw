@@ -143,6 +143,16 @@ renewable-energy-management-app/
 
 ---
 
+## Importar utilizadores predefinidos
+
+Para importar os utilizadores predefinidos para a base de dados, executa:
+
+```bash
+mongoimport --uri="mongodb://localhost:27017/renewable_energy" --collection=users --file=users.json --jsonArray
+```
+
+---
+
 ### Considerações de Segurança
 
 - **Variáveis de Ambiente**: Armazenar informações sensíveis como segredo JWT e strings de conexão da base de dados em variáveis de ambiente.

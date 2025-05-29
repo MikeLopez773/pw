@@ -16,44 +16,44 @@
                 </span>
             </div>
         </div>
-        <table id="usersTable" style="width:100%;margin-top:30px;">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Tipo</th>
-                   
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                  <td contenteditable="true" class="editavel" data-field="username">${u.username}</td>
-                  <td contenteditable="true" class="editavel" data-field="email">${u.email}</td>
-                  <td>
-                    <select class="editavel role-select">
-                      <option value="cliente" ${u.role === 'cliente' ? 'selected' : ''}>Cliente</option>
-                      <option value="tecnico" ${u.role === 'tecnico' ? 'selected' : ''}>Técnico</option>
-                      <option value="gestor" ${u.role === 'gestor' ? 'selected' : ''}>Gestor</option>
-                      <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
-                    </select>
-                  </td>
-                 
-        </table>
+        <div class="user-management-container">
+          <table id="usersTable" style="width:100%;margin-top:30px;">
+              <thead>
+                  <tr>
+                      <th>Username</th>
+                      <th>Email</th>
+                      <th>Tipo</th>
+                     
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    <td contenteditable="true" class="editable" data-field="username">${u.username}</td>
+                    <td contenteditable="true" class="editable" data-field="email">${u.email}</td>
+                    <td>
+                      <select class="role-select">
+                        <option value="cliente" ${u.role === 'cliente' ? 'selected' : ''}>Cliente</option>
+                        <option value="tecnico" ${u.role === 'tecnico' ? 'selected' : ''}>Técnico</option>
+                        <option value="gestor" ${u.role === 'gestor' ? 'selected' : ''}>Gestor</option>
+                        <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
+                      </select>
+               
+              </table>
+              <div id="floating-actions" style="display:none; margin-top: 20px; gap:10px;">
+                <button class="ok-btn" style="background:#1976d2;color:#fff;">OK</button>
+                <button class="cancel-btn" style="background:#e53935;color:#fff;">Cancelar</button>
+              </div>
+              <div id="message" style="margin-top:10px; color:green; font-weight:bold;"></div>
+            </div>
         <button onclick="window.location.href='admin-dashboard.html'" style="margin-top:30px;">Voltar ao Início</button>
     </div>
 
     <!-- Menu de contexto -->
     <div id="contextMenu" style="display:none; position:absolute; background:white; border:1px solid #ccc; border-radius:6px; box-shadow:0 4px 8px rgba(0,0,0,0.2); z-index:1000;">
         <ul style="list-style:none; margin:0; padding:10px;">
-            <li id="resetMfaOption" style="padding:8px 12px; cursor:pointer; color:#2a7ae4;">Resetar MFA</li>
+            <li id="resetPwOption" style="padding:8px 12px; cursor:pointer; color:#2a7ae4;">Reset Password</li>
         </ul>
     </div>
-
-    <div id="floating-actions" style="display:none; position:fixed; bottom:32px; right:32px; z-index:1000;">
-      <button class="ok-btn">OK</button>
-      <button class="cancel-btn">Cancelar</button>
-    </div>
-    <div id="message" style="position:fixed; bottom:80px; right:32px; color:green;"></div>
 
     <script src="admin_js.js"></script>
 </body>

@@ -1,12 +1,13 @@
 // Verificação de autenticação e role ADMIN
 document.addEventListener('DOMContentLoaded', () => {
+  // Verifica se existe token e se o utilizador é admin
   const token = sessionStorage.getItem('token');
   if (!token) {
     window.location.href = '../login_web/login.html';
     return;
   }
   try {
-    // Removemos o prefixo "Bearer " para decodificar o token
+    // Remove o prefixo "Bearer " se existir para decodificar o token
     const tokenForDecode = token.startsWith('Bearer ') ? token.slice(7) : token;
     const payload = JSON.parse(atob(tokenForDecode.split('.')[1]));
     if (payload.role !== 'admin') {
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // Atualiza o timestamp de atividade e checa inatividade (15 minutos)
+  // Atualiza o timestamp de atividade e verifica inatividade (15 minutos)
   function updateLastActivity() {
     sessionStorage.setItem('lastActivity', Date.now());
   }
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data.users.forEach(u => {
           const tr = document.createElement('tr');
           tr.dataset.userid = u._id;
+          // Cria as células editáveis e a coluna de ações
           tr.innerHTML = `
             <td contenteditable="true" class="editable" data-field="username">${u.username}</td>
             <td contenteditable="true" class="editable" data-field="email">${u.email}</td>
@@ -62,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
               </select>
             </td>
+            <td class="acoes"></td>
           `;
           tbody.appendChild(tr);
         });
@@ -77,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Só chama loadUsers se existir a tabela na página
   if (document.getElementById('usersTable')) {
-    loadUsers();
+    loadUsers().then(ensureEditavelClass);
   }
 
   // Logout: Remove token e redireciona para a página principal
@@ -92,50 +95,28 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // Exemplo de preenchimento dinâmico (coloque dentro do DOMContentLoaded)
+  // Preenche estatísticas do admin se existir a secção
   async function loadAdminStats() {
     try {
       const res = await fetch('/api/auth/stats', {
         headers: { 'Authorization': sessionStorage.getItem('token') }
       });
       const stats = await res.json();
-      console.log('Stats recebidos do backend:', stats); // <-- ADICIONA ESTA LINHA
+      console.log('Stats recebidos do backend:', stats);
       document.getElementById('totalUsers').textContent = stats.totalUsers ?? '--';
       document.getElementById('activeUsers').textContent = stats.activeUsers ?? '--';
       document.getElementById('totalClientes').textContent = stats.totalClientes ?? '--';
       document.getElementById('totalTecnicos').textContent = stats.totalTecnicos ?? '--';
       document.getElementById('totalGestores').textContent = stats.totalGestores ?? '--';
     } catch (e) {
-      console.error('Erro ao buscar stats:', e); // <-- ADICIONA ESTA LINHA
+      console.error('Erro ao buscar stats:', e);
     }
   }
   if (document.querySelector('.admin-stats')) loadAdminStats();
 
-  document.addEventListener('input', function(e) {
-    if (e.target.classList.contains('editavel')) {
-      const tr = e.target.closest('tr');
-      const acoesTd = tr.querySelector('.acoes');
-      // Só adiciona se ainda não existirem botões
-      if (!acoesTd.querySelector('.ok-btn')) {
-        acoesTd.innerHTML = `
-          <button class="ok-btn">OK</button>
-          <button class="cancel-btn">Cancelar</button>
-        `;
-        // Evento OK
-        acoesTd.querySelector('.ok-btn').onclick = function() {
-          acoesTd.innerHTML = '';
-          document.getElementById('message').textContent = 'Alterações guardadas!';
-          setTimeout(() => document.getElementById('message').textContent = '', 2000);
-        };
-        // Evento Cancelar
-        acoesTd.querySelector('.cancel-btn').onclick = function() {
-          // Recarrega a página para desfazer alterações (ou podes guardar o valor original e repor)
-          window.location.reload();
-        };
-      }
-    }
-  });
+  // --- GESTÃO DOS BOTÕES OK/CANCELAR FORA DA TABELA ---
 
+  // Referências aos botões flutuantes e mensagem
   const floatingActions = document.getElementById('floating-actions');
   const messageDiv = document.getElementById('message');
   let originalValues = {};
@@ -152,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   ensureEditavelClass();
 
-  // Guarda valores originais ao focar
+  // Guarda valores originais ao focar num campo editável
   document.addEventListener('focusin', function(e) {
     if (e.target.classList.contains('editavel')) {
       const tr = e.target.closest('tr');
@@ -162,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Mostra botões só quando houver alterações
+  // Mostra botões flutuantes quando há alterações
   document.addEventListener('input', function(e) {
     if (e.target.classList.contains('editavel')) {
       hasChanges = true;
@@ -170,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // OK: esconde botões e mostra mensagem
+  // Evento OK: esconde botões e mostra mensagem
   floatingActions.querySelector('.ok-btn').onclick = function() {
     floatingActions.style.display = 'none';
     hasChanges = false;
@@ -179,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     originalValues = {};
   };
 
-  // Cancelar: repõe valores originais e esconde botões
+  // Evento Cancelar: repõe valores originais e esconde botões
   floatingActions.querySelector('.cancel-btn').onclick = function() {
     document.querySelectorAll('tbody tr').forEach((tr) => {
       if (originalValues[tr.rowIndex]) {
@@ -205,4 +186,49 @@ document.addEventListener('DOMContentLoaded', () => {
       ensureEditavelClass();
     };
   }
+
+  // Menu de contexto personalizado para reset de password
+  const contextMenu = document.getElementById('contextMenu');
+  let selectedUserId = null;
+
+  // Mostra o menu ao clicar com o botão direito numa linha da tabela
+  document.getElementById('usersTable').addEventListener('contextmenu', function(e) {
+    const tr = e.target.closest('tr');
+    if (tr && tr.dataset.userid) {
+      e.preventDefault();
+      selectedUserId = tr.dataset.userid;
+      contextMenu.style.display = 'block';
+      contextMenu.style.left = `${e.pageX}px`;
+      contextMenu.style.top = `${e.pageY}px`;
+    } else {
+      contextMenu.style.display = 'none';
+    }
+  });
+
+  // Esconde o menu ao clicar fora
+  document.addEventListener('click', function(e) {
+    if (!contextMenu.contains(e.target)) {
+      contextMenu.style.display = 'none';
+    }
+  });
+
+  // Resetar password do utilizador selecionado
+  document.getElementById('resetPwOption').onclick = async function() {
+    contextMenu.style.display = 'none';
+    if (!selectedUserId) return;
+    if (!confirm('Tem a certeza que pretende resetar a password deste utilizador?')) return;
+    try {
+      const res = await fetch(`/api/auth/reset-password/${selectedUserId}`, {
+        method: 'POST',
+        headers: { 'Authorization': sessionStorage.getItem('token') }
+      });
+      if (res.ok) {
+        alert('Password resetada com sucesso! O utilizador receberá uma nova password por email ou deverá definir uma nova no próximo login.');
+      } else {
+        alert('Erro ao resetar a password.');
+      }
+    } catch (err) {
+      alert('Erro ao comunicar com o servidor.');
+    }
+  };
 });

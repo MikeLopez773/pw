@@ -346,16 +346,16 @@ button:hover, .btn:hover {
 /* Ações flutuantes */
 #floating-actions {
   display: none;
+  margin: 20px auto 0 auto;
+  gap: 10px;
+  justify-content: center;
   position: fixed;
   bottom: 30px;
   right: 30px;
   z-index: 999;
-  gap: 8px;
-  background: #fff;
-  border: 1px solid #ddd;
-  padding: 12px 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 #floating-actions .ok-btn,
 #floating-actions .cancel-btn {
@@ -378,4 +378,24 @@ button:hover, .btn:hover {
 }
 #floating-actions .cancel-btn:hover {
   background: #b82a1a;
+}
+
+.user-management-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end; /* Alinha à direita */
+}
+
+#usersTable {
+    width: 70%; /* ou ajusta para o tamanho desejado */
+    margin: 30px 0 0 0; /* remove auto para alinhar à direita */
+    margin-left: 0;
+    margin-right: 0;
 }

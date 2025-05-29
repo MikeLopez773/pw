@@ -397,4 +397,9 @@ router.post('/logout', auth, async (req, res) => {
   }
 });
 
+// Exemplo em Express
+router.post('/reset-password/:id', authMiddleware, async (req, res) => {
+  // lógica para resetar a password do utilizador com o id req.params.id
+});
+
 module.exports = router;

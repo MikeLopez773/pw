@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Gestão de Utilizadores - Técnico</title>
+  <link rel="stylesheet" href="tecnico_css.css">
+  <script defer src="gestao-utilizadores.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Gestão de Utilizadores</h1>
+    <div id="message"></div>
+
+    <nav class="dashboard-nav">
+      <button onclick="window.location.href='tecnico-dashboard.html'">Dashboard Técnico</button>
+      <button onclick="window.location.href='../pagina_web/front.html'">Terminar Sessão</button>
+    </nav>
+
+    <section class="users-section">
+      <h2>Lista de Utilizadores</h2>
+      <div class="search-bar">
+        <input type="text" id="filterUsers" placeholder="Filtrar por nome ou email...">
+      </div>
+      <div class="users-grid" id="usersGrid">
+        <p>Carregando utilizadores...</p>
+      </div>
+    </section>
+
+    <section class="pending-panels-section">
+      <h2>Painéis Pendentes de Certificação</h2>
+      <div id="pendingPanels" class="panels-container">
+        <p>Carregando painéis pendentes...</p>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

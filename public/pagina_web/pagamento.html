@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Pagamento | SolarUBI</title>
+  <link rel="stylesheet" href="pagamento_css.css">
+</head>
+<body>
+  <div class="venda-container">
+    <h1>Pagamento</h1>
+    <div id="resumoCarrinho"></div>
+    <!-- Exemplo de formulário de pagamento -->
+    <form id="pagamentoForm" autocomplete="off">
+      <label>Nome no Cartão:
+        <input type="text" required pattern="^[A-Za-zÀ-ÿ\s]+$" maxlength="40" autocomplete="cc-name" placeholder="Nome completo">
+      </label>
+      <label>Número do Cartão:
+        <input type="text" required maxlength="19" inputmode="numeric" autocomplete="cc-number"
+          pattern="^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})$"
+          placeholder="0000 0000 0000 0000">
+      </label>
+      <label>Validade:
+        <input type="text" required maxlength="5" inputmode="numeric" autocomplete="cc-exp"
+          pattern="^(0[1-9]|1[0-2])\/\d{2}$" placeholder="MM/AA">
+      </label>
+      <label>CVC:
+        <input type="text" required maxlength="4" inputmode="numeric" autocomplete="cc-csc"
+          pattern="^\d{3,4}$" placeholder="123">
+      </label>
+      <button type="submit">Pagar</button>
+    </form>
+    <div id="pagamentoMensagem"></div>
+    <p style="text-align:center; margin-top:32px;">
+      <button id="voltarBtn">Voltar à loja</button>
+    </p>
+  </div>
+  <script src="pagamento_js.js"></script>
+</body>
+</html>

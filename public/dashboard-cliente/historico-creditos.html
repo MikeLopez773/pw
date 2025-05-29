@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histórico de Créditos Energéticos</title>
+  <link rel="stylesheet" href="../cliente_css.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Histórico de Créditos Energéticos</h1>
+    <canvas id="creditosChart" width="400" height="200"></canvas>
+    <table id="creditosTable">
+      <thead>
+        <tr>
+          <th>Mês</th>
+          <th>Créditos Ganhos</th>
+          <th>Créditos Usados</th>
+          <th>Saldo Final</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dados serão preenchidos dinamicamente -->
+      </tbody>
+    </table>
+  </div>
+  <script src="historico-creditos.js"></script>
+</body>
+</html>

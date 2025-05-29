@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestão de Utilizadores</title>
+    <link rel="stylesheet" href="admin_css.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Gestão de Utilizadores</h2>
+        <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 10px;">
+            <div style="position: relative;" class="search-container">
+                <input type="text" id="userSearch" placeholder="Pesquisar utilizador..." style="padding: 8px 32px 8px 12px; border-radius: 6px; border: 1.5px solid #b6d4fa; font-size: 1rem;">
+                <span class="search-icon" style="position: absolute; right: 10px; top: 40%; transform: translateY(-50%); color: #2a7ae4; pointer-events: none;">
+                    &#128269;
+                </span>
+            </div>
+        </div>
+        <table id="usersTable" style="width:100%;margin-top:30px;">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Tipo</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                  <td contenteditable="true" class="editavel" data-field="username">${u.username}</td>
+                  <td contenteditable="true" class="editavel" data-field="email">${u.email}</td>
+                  <td>
+                    <select class="editavel role-select">
+                      <option value="cliente" ${u.role === 'cliente' ? 'selected' : ''}>Cliente</option>
+                      <option value="tecnico" ${u.role === 'tecnico' ? 'selected' : ''}>Técnico</option>
+                      <option value="gestor" ${u.role === 'gestor' ? 'selected' : ''}>Gestor</option>
+                      <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
+                    </select>
+                  </td>
+                 
+        </table>
+        <button onclick="window.location.href='admin-dashboard.html'" style="margin-top:30px;">Voltar ao Início</button>
+    </div>
+
+    <!-- Menu de contexto -->
+    <div id="contextMenu" style="display:none; position:absolute; background:white; border:1px solid #ccc; border-radius:6px; box-shadow:0 4px 8px rgba(0,0,0,0.2); z-index:1000;">
+        <ul style="list-style:none; margin:0; padding:10px;">
+            <li id="resetMfaOption" style="padding:8px 12px; cursor:pointer; color:#2a7ae4;">Resetar MFA</li>
+        </ul>
+    </div>
+
+    <div id="floating-actions" style="display:none; position:fixed; bottom:32px; right:32px; z-index:1000;">
+      <button class="ok-btn">OK</button>
+      <button class="cancel-btn">Cancelar</button>
+    </div>
+    <div id="message" style="position:fixed; bottom:80px; right:32px; color:green;"></div>
+
+    <script src="admin_js.js"></script>
+</body>
+</html>

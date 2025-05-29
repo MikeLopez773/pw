@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Venda de Painéis Solares | SolarUBI</title>
+    <link rel="stylesheet" href="venda_css.css">
+</head>
+<body>
+    <div class="venda-container">
+        <h1>Venda de Painéis Solares</h1>
+        <p>Escolha o modelo ideal para o seu projeto e adicione ao carrinho!</p>
+        <div class="produtos" id="produtos">
+            <!-- Produtos serão inseridos por JS -->
+        </div>
+
+        <h2>Carrinho de Compras</h2>
+        <div class="carrinho" id="carrinho">
+            <p>O seu carrinho está vazio.</p>
+        </div>
+
+        <div class="checkout" id="checkout" style="display:none;">
+            <h2>Pagamento</h2>
+            <form id="pagamentoForm">
+                <label>Nome no Cartão:
+                    <input type="text" required>
+                </label>
+                <label>Número do Cartão:
+                    <input type="text" maxlength="19" pattern="\d{16}" required placeholder="0000 0000 0000 0000">
+                </label>
+                <label>Validade:
+                    <input type="text" maxlength="5" pattern="\d{2}/\d{2}" required placeholder="MM/AA">
+                </label>
+                <label>CVC:
+                    <input type="text" maxlength="4" pattern="\d{3,4}" required placeholder="123">
+                </label>
+                <button type="submit">Pagar</button>
+            </form>
+            <div id="pagamentoMensagem"></div>
+        </div>
+
+        
+            <button id="voltarBtn">Voltar à página inicial</button>
+            <button onclick="window.location.href='../dashboard-cliente/dashboard.html'">Voltar à página de cliente</button>
+
+    </div>
+    <script src="venda_js.js"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+body {
+  background: #eaf3fb;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  background: #fff;
+  max-width: 500px;
+  margin: 48px auto 0 auto;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px #0001;
+  padding: 32px 28px 28px 28px;
+  text-align: center;
+}
+
+h1, h2 {
+  color: #2574ce;
+  margin-bottom: 24px;
+}
+
+button {
+  background: linear-gradient(90deg, #2574ce 60%, #3ba1f7 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 12px 0;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #1e5fa8 60%, #2574ce 100%);
+}
+
+input, select {
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0 18px 0;
+  border: 1px solid #bcd;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  background: #f8fbff;
+}
+
+th, td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #e0e7ef;
+  text-align: left;
+}
+
+th {
+  background: #eaf3fb;
+  color: #2574ce;
+  font-weight: 600;
+}
+
+#message {
+  margin-top: 18px;
+  color: #e53935;
+  font-weight: 500;
+}
+
+/* Estilos para a tabela */
+#creditosTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#creditosTable th, #creditosTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+#creditosTable th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .container {
+    max-width: 98vw;
+    padding: 12px 4vw;
+  }
+  table, th, td {
+    font-size: 0.95rem;
+  }
+}

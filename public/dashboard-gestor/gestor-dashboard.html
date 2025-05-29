@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Gestor</title>
+    <link rel="stylesheet" href="gestor_css.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="gestor_js.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- CABEÇALHO COM TÍTULO -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>📊 Dashboard Gestor de Operações</h1>
+                <p>Sistema de Monitorização de Energia Renovável</p>
+            </div>
+            <nav class="dashboard-nav">
+                <button onclick="window.location.href='../pagina_web/front.html'">Terminar Sessão</button>
+            </nav>
+        </header>
+        
+        <section class="monitoring-section">
+            <h2>Monitorização da Produção</h2>
+            
+            <!-- Campo de pesquisa manual -->
+            <form id="monitorForm">
+                <div class="form-group">
+                    <label for="userId">ID do Cliente:</label>
+                    <input type="text" id="userId" name="userId" placeholder="Insira o ID do cliente" required>
+                </div>
+                <button type="submit">Ver Produção</button>
+            </form>
+            
+            <div id="productionReadings" class="readings-container"></div>
+        </section>
+        
+        <!-- NOVA SECÇÃO: Gráficos -->
+        <section class="charts-section">
+            <h2>📊 Análise Visual</h2>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Produção por Hora (Últimas 24h)</h3>
+                    <canvas id="productionChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Eficiência dos Painéis</h3>
+                    <canvas id="efficiencyChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Comparação de Clientes</h3>
+                    <canvas id="clientsChart"></canvas>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Secção de Lista de Clientes -->
+        <section class="clients-section">
+            <h2>Lista de Clientes</h2>
+            <div class="search-bar">
+                <input type="text" id="filterClients" placeholder="Filtrar por nome ou email...">
+            </div>
+            <div class="clients-grid" id="clientsGrid">
+                <p>Carregando clientes...</p>
+            </div>
+        </section>
+        
+        <section class="reports-section">
+            <h2>Relatórios Operacionais</h2>
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>Produção Total</h3>
+                    <p id="totalProduction">Carregando...</p>
+                </div>
+                <div class="report-card">
+                    <h3>Painéis Ativos</h3>
+                    <p id="activePanels">Carregando...</p>
+                </div>
+                <div class="report-card">
+                    <h3>Eficiência Média</h3>
+                    <p id="averageEfficiency">Carregando...</p>
+                </div>
+                <div class="report-card">
+                    <h3>Produção Mais Recente</h3>
+                    <p id="latestProduction">Carregando...</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

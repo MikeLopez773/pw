@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Registar Painel Solar</title>
+<link rel="stylesheet" href="cliente_css.css">
+  <script defer src="cliente_js.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Registar Painel Solar</h2>
+    <form id="panelForm">
+      <input type="text" name="location" placeholder="Localização" required>
+      <input type="number" name="capacity" placeholder="Capacidade (kW)" min="0.1" step="0.1" required>
+      <input type="date" name="installationDate" required>
+      <button type="submit">Registar Painel</button>
+    </form>
+    <div id="message"></div>
+    <button onclick="window.location.href='cliente-dashboard.html'">Voltar ao Dashboard</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="admin_css.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard Administrador</h1>
+        <div class="admin-stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalClientes">--</div>
+                <div class="stat-label">Clientes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalTecnicos">--</div>
+                <div class="stat-label">Técnicos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalGestores">--</div>
+                <div class="stat-label">Gestores</div>
+            </div>
+        </div>
+        <div class="admin-stats">
+            <div class="stat-card">
+                <div class="stat-number" id="activeUsers">--</div>
+                <div class="stat-label">Utilizadores Ativos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalUsers">--</div>
+                <div class="stat-label">Total de Utilizadores</div>
+            </div>
+        </div>
+        <div class="dashboard-btns-row">
+            <button onclick="window.location.href='criar.utilizador.html'">Criar Utilizador</button>
+            <button onclick="window.location.href='gestão-utilizadores.html'">Gestão de Utilizadores</button>
+            <button onclick="window.location.href='alterar-password.html'">Alterar Password</button>
+            <button onclick="window.location.href='../pagina_web/front.html'">Sair</button>
+        </div>
+    </div>
+    <script src="admin_js.js"></script>
+</body>
+</html>

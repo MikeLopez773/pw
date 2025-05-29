@@ -1,0 +1,381 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corpo e fundo */
+body, html {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(120deg, #e3f0fc 60%, #f4f8fb 100%);
+  color: #1a2233;
+  min-height: 100vh;
+}
+
+/* Container principal */
+.container {
+  max-width: 950px;
+  margin: 48px auto 32px auto;
+  background: rgba(255,255,255,0.92);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(42, 122, 228, 0.13);
+  padding: 44px 38px 32px 38px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(2px);
+}
+
+/* Títulos */
+h1, h2 {
+  color: #2a7ae4;
+  text-align: center;
+  margin-bottom: 24px;
+  letter-spacing: 1.5px;
+  font-weight: 800;
+  text-shadow: 0 2px 8px #e3f0fc;
+}
+
+/* Barra de pesquisa */
+.search-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+#userSearch {
+  padding: 10px 38px 10px 16px;
+  padding-right: 36px; /* espaço para a lupa */
+  border-radius: 8px;
+  border: 2px solid #b6d4fa;
+  font-size: 1.08rem;
+  background: #f4f8fb;
+  transition: border 0.2s, box-shadow 0.2s;
+  outline: none;
+  margin-bottom: 16px;
+}
+#userSearch:focus {
+  border: 2px solid #2a7ae4;
+  box-shadow: 0 2px 8px #b6d4fa;
+}
+.search-icon {
+  position: absolute;
+  right: 12px;
+  top: 40%; /* ou 38% conforme preferires */
+  transform: translateY(-50%);
+  color: #2a7ae4;
+  font-size: 1.18rem;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  line-height: 1;
+}
+.search-icon svg, .search-icon img {
+  display: block;
+  height: 20px; /* ou ajusta conforme o input */
+  width: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Tabela de utilizadores */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  background: #f9fbfd;
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 1.07rem;
+  box-shadow: 0 2px 16px rgba(42,122,228,0.06);
+}
+
+th, td {
+  padding: 15px 12px;
+  text-align: left;
+}
+
+th {
+  background: linear-gradient(90deg, #e3f0fc 80%, #dbeafe 100%);
+  color: #2a7ae4;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #b6d4fa;
+}
+
+tr:nth-child(even) {
+  background: #f4f8fb;
+}
+
+tr:hover {
+  background: #e3f0fc;
+  transition: background 0.15s;
+}
+
+.editable:focus {
+  outline: 2px solid #2a7ae4;
+}
+
+/* Select para roles */
+select.role-select {
+  padding: 7px 18px;
+  border-radius: 6px;
+  border: 1.5px solid #b6d4fa;
+  background: #fff;
+  font-size: 1rem;
+  color: #2a7ae4;
+  font-weight: 600;
+  transition: border 0.2s;
+}
+select.role-select:focus {
+  border: 1.5px solid #2a7ae4;
+  background: #e3f0fc;
+}
+
+/* Botões principais */
+button, .btn {
+  background: linear-gradient(90deg, #2a7ae4 70%, #185fa7 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 18px;
+  box-shadow: 0 2px 8px #e3f0fc;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+button:hover, .btn:hover {
+  background: linear-gradient(90deg, #185fa7 70%, #2a7ae4 100%);
+  box-shadow: 0 4px 18px #b6d4fa;
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* Botões de ação OK/Cancelar */
+#editActions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  margin-top: 28px;
+}
+#okEditBtn {
+  background: #2a7ae4;
+}
+#cancelEditBtn {
+  background: #e53935;
+}
+#okEditBtn:hover {
+  background: #185fa7;
+}
+#cancelEditBtn:hover {
+  background: #b71c1c;
+}
+
+/* Mensagens */
+#message {
+  margin-top: 18px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 8px;
+}
+#message.success { color: #388e3c; }
+#message.error { color: #e53935; }
+#message.info { color: #2a7ae4; }
+
+/* Menu de contexto personalizado */
+#contextMenu {
+  min-width: 180px;
+  background: #fff;
+  border: 2px solid #2a7ae4;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px #b6d4fa;
+  padding: 12px 0 8px 0;
+  z-index: 1000;
+  position: absolute;
+}
+#contextMenu button {
+  background: none;
+  color: #2a7ae4;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.15s, color 0.15s;
+}
+#contextMenu button:hover {
+  background: #e3f0fc;
+  color: #185fa7;
+}
+
+/* Estilo para o formulário de criar utilizador */
+.create-user-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin: 32px auto 0 auto; /* Espaço superior extra */
+  width: 100%;
+  max-width: 420px;
+  padding: 24px 18px 18px 18px; /* Espaçamento interno */
+  background: rgba(255,255,255,0.97);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px #e3f0fc;
+}
+
+.create-user-form input,
+.create-user-form select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 7px;
+  border: 1.5px solid #b6d4fa;
+  font-size: 1rem;
+  margin-bottom: 0;
+  background: #f4f8fb;
+  transition: border 0.2s;
+  box-sizing: border-box;
+}
+
+.create-user-form button {
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.acoes {
+  min-width: 120px;
+  text-align: center;
+}
+.ok-btn, .cancel-btn {
+  margin: 0 2px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: none;
+  background: #2a7ae4;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.cancel-btn {
+  background: #e43c2a;
+}
+.ok-btn:hover {
+  background: #1a5bb8;
+}
+.cancel-btn:hover {
+  background: #b82a1a;
+}
+
+@media (max-width: 600px) {
+  .create-user-form {
+    max-width: 98vw;
+    padding: 12px 2vw;
+  }
+}
+
+/* Responsivo */
+@media (max-width: 1100px) {
+  .container {
+    padding: 18px 2vw;
+    margin: 20px 2vw;
+  }
+  table {
+    font-size: 0.97rem;
+  }
+  #editActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+}
+
+/* Estatísticas do admin */
+.admin-stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.admin-stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.stat-card {
+  background: #f4f8fb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #e3f0fc;
+  padding: 24px 32px;
+  text-align: center;
+  min-width: 150px;
+}
+.stat-number {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #2a7ae4;
+  margin-bottom: 8px;
+}
+.stat-label {
+  font-size: 1rem;
+  color: #185fa7;
+}
+
+/* Linhas de botões do dashboard */
+.dashboard-btns-row {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  max-width: 700px; /* igual ou próximo da largura dos cards */
+  margin: 32px auto 0 auto;
+  flex-wrap: wrap;
+}
+.dashboard-btns-row button {
+  min-width: 200px;
+}
+
+/* Ações flutuantes */
+#floating-actions {
+  display: none;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 999;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+#floating-actions .ok-btn,
+#floating-actions .cancel-btn {
+  margin: 0 4px;
+  padding: 6px 18px;
+  border-radius: 6px;
+  border: none;
+  background: #2a7ae4;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#floating-actions .cancel-btn {
+  background: #e43c2a;
+}
+#floating-actions .ok-btn:hover {
+  background: #1a5bb8;
+}
+#floating-actions .cancel-btn:hover {
+  background: #b82a1a;
+}

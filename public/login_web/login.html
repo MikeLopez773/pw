@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - SolarUBI</title>
+  <link rel="stylesheet" href="login_css.css">
+</head>
+<body>
+  <div class="container">
+    <div class="login-box">
+      <h2 id="formTitle">Login</h2>
+      <div id="loginMessage"></div>
+      <form id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Nome de utilizador" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Entrar</button>
+      </form>
+      <div class="toggle-link" id="showRegister">Criar nova conta</div>
+
+      <form id="registerForm" style="display:none;">
+        <input type="text" id="registerUsername" placeholder="Nome de utilizador" required>
+        <input type="password" id="registerPassword" placeholder="Password" required>
+        <input type="text" id="registerEmail" placeholder="Email" required>
+        <button type="submit">Registar</button>
+        <div id="registerMessage"></div>
+      </form>
+      <div class="toggle-link" id="showLogin" style="display:none;">Já tenho conta</div>
+    </div>
+    <div style="text-align:center; margin-top:25px;">
+      <button onclick="window.location.href='../pagina_web/front.html'">Sair</button>
+    </div>
+  </div>
+  <script src="login_js.js"></script>
+</body>
+</html>

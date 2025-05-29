@@ -1,0 +1,52 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão Online</title>
+  <link rel="stylesheet" href="gestao_css.css">
+</head>
+<body>
+  <header>
+    <h1>Gestão Online</h1>
+    <p>Acompanhe a produção, monitorize o seu sistema e consulte créditos energéticos através da nossa plataforma.</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Produção Atual</h2>
+      <div class="card">
+        <span>Potência Instantânea:</span>
+        <span id="power">-- W</span>
+      </div>
+      <div class="card">
+        <span>Produção Hoje:</span>
+        <span id="today">-- kWh</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Estado do Sistema</h2>
+      <div class="card">
+        <span>Status:</span>
+        <span id="status">A aguardar dados...</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Créditos Energéticos</h2>
+      <div class="card">
+        <span>Total de Créditos:</span>
+        <span id="credits">-- €</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Gestão Online. Todos os direitos reservados.
+  </footer>
+
+  <script src="gestao_js.js"></script>
+</body>
+</html>

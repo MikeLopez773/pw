@@ -1,0 +1,183 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corpo e fundo */
+body, html {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(120deg, #e3f0fc 60%, #f4f8fb 100%);
+  color: #222;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+/* Containers principais */
+.container, .venda-container, .instalacao-container, .gestor-container {
+  max-width: 950px;
+  margin: 48px auto;
+  background: rgba(255,255,255,0.97);
+  border-radius: 22px;
+  box-shadow: 0 12px 48px 0 rgba(42, 122, 228, 0.15), 0 1.5px 6px 0 rgba(42,122,228,0.04);
+  padding: 48px 38px 38px 38px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+  border: 1.5px solid #e3f0fc;
+  animation: fadeInDown 0.7s;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-40px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* Títulos */
+h1, h2, h3, h4 {
+  color: #2a7ae4;
+  font-weight: 600;
+  margin-bottom: 18px;
+  letter-spacing: 1.1px;
+  text-shadow: 0 2px 12px #e3f0fc;
+}
+
+h1 { font-size: 2.3rem; text-align: center; }
+h2 { font-size: 1.5rem; margin-top: 32px; }
+h3 { font-size: 1.2rem; }
+h4 { font-size: 1.1rem; }
+
+/* Parágrafos e listas */
+p, li, label {
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: #222;
+}
+
+ul, ol {
+  margin-left: 24px;
+  margin-bottom: 16px;
+}
+
+a {
+  color: #2a7ae4;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: #185fa7;
+  text-decoration: underline;
+}
+
+/* Botões gerais */
+button, .btn, input[type="submit"] {
+  background: linear-gradient(90deg, #2a7ae4 70%, #185fa7 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 36px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  box-shadow: 0 2px 12px #e3f0fc;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  display: inline-block;
+}
+button:hover, .btn:hover, input[type="submit"]:hover {
+  background: linear-gradient(90deg, #185fa7 70%, #2a7ae4 100%);
+  box-shadow: 0 6px 24px #b6d4fa;
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Inputs e forms */
+input, select, textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1.5px solid #b6d4fa;
+  font-size: 1.08rem;
+  background: #f4f8fb;
+  transition: border 0.2s, box-shadow 0.2s;
+  outline: none;
+  margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+input:focus, select:focus, textarea:focus {
+  border: 2px solid #2a7ae4;
+  box-shadow: 0 2px 8px #b6d4fa;
+}
+
+/* Cards e secções */
+.feature, .gestor-section, .produto, .carrinho, .checkout, .instalacao-media img, .instalacao-media video {
+  background: #f9fbfd;
+  border-radius: 16px;
+  box-shadow: 0 2px 14px rgba(42,122,228,0.08);
+  padding: 28px 18px;
+  margin-bottom: 24px;
+  border: 1.5px solid #e3f0fc;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.feature:hover, .gestor-section:hover, .produto:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(42,122,228,0.13);
+  border-color: #b6d4fa;
+}
+
+/* Imagens e media */
+img, video {
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #e3f0fc;
+  margin-bottom: 12px;
+}
+
+/* Footer e social */
+.footer {
+  text-align: center;
+  color: #185fa7;
+  font-size: 1rem;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+
+.social-media {
+  text-align: center;
+  margin-bottom: 18px;
+}
+.social-media a {
+  margin: 0 8px;
+  font-weight: 600;
+  font-size: 1.08rem;
+}
+
+/* Mensagens */
+#message, .message {
+  text-align: center;
+  margin: 16px auto;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.08rem;
+  max-width: 400px;
+  display: none;
+}
+#message.success, .message.success { display: block; background: #e3f9e5; color: #2e7d32; }
+#message.error, .message.error { display: block; background: #ffeaea; color: #c62828; }
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .container, .venda-container, .instalacao-container, .gestor-container {
+    padding: 18px 2vw;
+    margin: 20px 2vw;
+  }
+  h1 { font-size: 1.5rem; }
+}
+
+@media (max-width: 700px) {
+  .container, .venda-container, .instalacao-container, .gestor-container { padding: 8px 1vw; }
+  .feature, .gestor-section, .produto, .carrinho, .checkout { padding: 14px 8px; }
+  img, video { max-width: 98vw; }
+}

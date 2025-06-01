@@ -109,5 +109,49 @@ document.getElementById('voltarBtn').onclick = function() {
   window.location.href = 'front.html';
 };
 
+function renderProdutos() {
+  const produtosDiv = document.getElementById('produtos');
+  produtosDiv.innerHTML = '';
+  produtos.forEach(produto => {
+    const produtoHTML = `
+      <div class="produto">
+        <img src="${produto.imagem}" alt="${produto.nome}">
+        <h3>${produto.nome}</h3>
+        <p>${produto.descricao}</p>
+        <div class="preco">${produto.preco.toFixed(2)} €</div>
+        <div style="display: flex; gap: 10px; justify-content: center;">
+          <button onclick="adicionarCarrinho(${produto.id})">Adicionar ao Carrinho</button>
+          <button class="botao-quantidade" onclick="aumentarQuantidade(${produto.id})">+</button>        </div>
+        <div style="display: flex; gap: 10px; justify-content: center;">
+          <button class="diminuirQuantidade" onclick="diminuirQuantidade(${produto.id})">-</button>
+      </div>
+    `;
+    produtosDiv.insertAdjacentHTML('beforeend', produtoHTML);
+  });
+}
+
+window.aumentarQuantidade = function(id) {
+  const item = carrinho.find(p => p.id === id);
+  const produto = produtos.find(p => p.id === id);
+
+  if (item) {
+    item.qtd++;
+  } else {
+    carrinho.push({ ...produto, qtd: 1 });
+  }
+
+  renderCarrinho();
+};
+
+function diminuirQuantidade(id) {
+  const item = carrinho.find(p => p.id === id);
+  if (item && item.qtd > 1) {
+    item.qtd--;
+  } else if (item) {
+    carrinho = carrinho.filter(p => p.id !== id); // remove completamente
+  }
+  renderCarrinho();
+}
+
 renderProdutos();
 renderCarrinho();

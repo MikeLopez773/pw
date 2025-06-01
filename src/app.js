@@ -97,9 +97,3 @@ connectDB()
 // Exportar a app para testes ou uso externo (opcional)
 module.exports = app;
 
-router.post('/register', auth, async (req, res) => {
-  // ...
-  const { username, installationDate, ...rest } = req.body;
-  const user = await User.findOne({ username });
-  // ...
-});

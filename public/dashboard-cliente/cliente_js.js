@@ -263,5 +263,15 @@ updateLastActivity();
 // Checa inatividade a cada minuto
 setInterval(checkInactivity, 60000);
 
+// Bloquear números e símbolos no input de localização
+document.addEventListener('DOMContentLoaded', function() {
+  const locationInput = document.getElementById('location');
+  if (locationInput) {
+    locationInput.addEventListener('input', function () {
+      this.value = this.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+    });
+  }
+});
+
 console.log('Token JWT:', getToken());
 

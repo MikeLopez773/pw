@@ -149,6 +149,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Nova implementação para geração de certificado
+  document.getElementById('certificateForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const panelId = e.target.panelId.value;
+    console.log('📄 [FRONTEND] A gerar certificado para o painel:', panelId);
+    const res = await fetch('/api/panels/certificate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ panelId })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showMessage('Certificado gerado com sucesso!', 'success');
+    } else {
+      showMessage(data.message || 'Erro ao gerar certificado', 'error');
+    }
+  });
+
   // Carregar painéis certificados
   async function loadCertifiedPanels() {
     try {

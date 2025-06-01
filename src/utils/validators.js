@@ -9,9 +9,9 @@ function isValidPassword(password) {
   return typeof password === 'string' && password.length >= 6;
 }
 
-// Valida localização (não vazio)
+// Valida localização (apenas letras e espaços, não vazio)
 function isValidLocation(location) {
-  return typeof location === 'string' && location.trim().length > 0;
+  return typeof location === 'string' && /^[A-Za-zÀ-ÿ\s]+$/.test(location.trim());
 }
 
 // Valida capacidade do painel (número positivo)

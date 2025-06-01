@@ -37,18 +37,9 @@
 
       <div id="userResult" class="user-info"></div>
 
-      <form id="certificateForm" style="display:none;">
-        <input type="hidden" name="userId" id="userId">
-        <input type="hidden" name="username" id="username">
-        <div class="form-group">
-          <label for="panelId">ID do Painel:</label>
-          <input type="text" name="panelId" id="panelId" placeholder="Insira o ID do painel" required>
-        </div>
-        <div class="form-group">
-          <label for="certificate">Certificado (PDF):</label>
-          <input type="file" name="certificate" id="certificate" accept="application/pdf" required>
-        </div>
-        <button type="submit">Certificar Painel</button>
+      <form id="certificateForm">
+        <input type="hidden" name="panelId" value="O_ID_DO_PAINEL">
+        <button type="submit">Certificar</button>
       </form>
     </section>
 

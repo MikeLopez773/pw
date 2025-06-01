@@ -109,6 +109,29 @@ async function loadCredits() {
   }
 }
 
+// Alterar password
+async function alterarPassword(userId, newPassword) {
+  console.log('🔄 [FRONTEND] A tentar alterar password para userId:', userId, 'com nova password:', newPassword);
+  const res = await fetch('/api/auth/change-password', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': getToken()
+    },
+    body: JSON.stringify({ userId, newPassword })
+  });
+  const data = await res.json();
+  console.log('🔁 [FRONTEND] Resposta do backend:', data, 'Status:', res.status);
+  if (res.ok) {
+    showMessage('Password alterada com sucesso!', 'success');
+    // Limpar o formulário se existir
+    const form = document.getElementById('alterarPasswordForm');
+    if (form) form.reset();
+  } else {
+    showMessage(data.message || 'Erro ao alterar password', 'error');
+  }
+}
+
 // Renderizações e mensagens
 function renderPanels(panels) {
   const el = document.getElementById('panelsTable');
@@ -209,5 +232,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     const data = await res.json();
     showMessage(data.message, res.ok ? 'success' : 'error');
+  });
+
+  const alterarPwForm = document.getElementById('alterarPasswordForm');
+  if (alterarPwForm) {
+    alterarPwForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const token = getToken();
+      const payload = token ? JSON.parse(atob(token.split('.')[1])) : {};
+      const userId = payload.id || payload._id || payload.userId;
+      const newPassword = alterarPwForm.newPassword.value;
+      console.log('🟢 [FRONTEND] Submissão do formulário:', { userId, newPassword });
+      await alterarPassword(userId, newPassword);
+    });
+  }
+
+  // Novo evento para gerar certificado
+  document.getElementById('certificateForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const panelId = e.target.panelId.value;
+    console.log('📄 [FRONTEND] A gerar certificado para o painel:', panelId);
+    const res = await fetch('/api/panels/certificate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ panelId })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showMessage('Certificado gerado com sucesso!', 'success');
+    } else {
+      showMessage(data.message || 'Erro ao gerar certificado', 'error');
+    }
   });
 });

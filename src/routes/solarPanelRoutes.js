@@ -82,4 +82,36 @@ router.post('/register', auth, async (req, res) => {
   }
 });
 
+// Defina as rotas aqui
+router.get('/', auth, async (req, res) => {
+  try {
+    const panels = await SolarPanel.find({ user: req.user.id });
+    res.json(panels);
+  } catch (err) {
+    res.status(500).json({ message: 'Erro ao obter painéis.' });
+  }
+});
+
+// Rota para gerar ou receber certificado de painel
+router.post('/certificate', async (req, res) => {
+  const { panelId } = req.body;
+  if (!panelId) {
+    return res.status(400).json({ message: 'panelId em falta.' });
+  }
+  try {
+    const updatedPanel = await SolarPanel.findByIdAndUpdate(
+      panelId,
+      { validated: true },
+      { new: true }
+    );
+    if (!updatedPanel) {
+      return res.status(404).json({ message: 'Painel não encontrado.' });
+    }
+    res.json({ message: 'Painel certificado com sucesso!', panel: updatedPanel });
+  } catch (error) {
+    console.error('❌ Erro ao certificar painel:', error);
+    res.status(500).json({ message: 'Erro ao certificar painel.' });
+  }
+});
+
 module.exports = router;

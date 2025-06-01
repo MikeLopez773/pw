@@ -16,6 +16,7 @@ const authRoutes = require('./routes/authRoutes');
 const monitoringRoutes = require('./routes/monitoringRoutes');
 const energyMonitorRoutes = require('./routes/energyMonitorRoutes');
 const creditRoutes = require('./routes/creditRoutes'); // ADICIONAR ESTA LINHA
+const panelRoutes = require('./routes/solarPanelRoutes');
 const solarPanelRoutes = require('./routes/solarPanelRoutes');
 
 // Inicializar a aplicação Express
@@ -68,7 +69,7 @@ connectDB()
     app.use('/api/monitoring', monitoringRoutes);
     app.use('/api/energy', energyMonitorRoutes);
     app.use('/api/credit', creditRoutes);
-    app.use('/api/panels', solarPanelRoutes);    // <-- Esta linha é obrigatória!
+    app.use('/api/panels', panelRoutes);
 
     console.log('✅ Rotas registradas:');
     console.log('   /api/auth - Autenticação');

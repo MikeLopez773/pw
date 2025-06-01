@@ -397,9 +397,32 @@ router.post('/logout', authMiddleware, async (req, res) => {
   }
 });
 
-// Exemplo em Express
-router.post('/reset-password/:id', authMiddleware, async (req, res) => {
-  // lógica para resetar a password do utilizador com o id req.params.id
+// Rota para alterar a password (qualquer um pode alterar, desde que tenha o userId e a nova password)
+router.post('/change-password', async (req, res) => {
+  const { userId, newPassword } = req.body;
+  console.log('🔄 [BACKEND] Pedido para alterar password:', { userId, newPassword });
+  if (!userId || !newPassword) {
+    console.log('❌ [BACKEND] Dados em falta.');
+    return res.status(400).json({ message: 'Dados em falta.' });
+  }
+  try {
+    const hashed = await bcrypt.hash(newPassword, 10);
+    const result = await User.findByIdAndUpdate(
+      userId,
+      { password: hashed },
+      { new: true } // <-- retorna o documento atualizado
+    );
+    if (result) {
+      console.log('✅ [BACKEND] Password alterada com sucesso para o utilizador:', userId);
+      res.json({ message: 'Password alterada com sucesso.' });
+    } else {
+      console.log('❌ [BACKEND] Utilizador não encontrado:', userId);
+      res.status(404).json({ message: 'Utilizador não encontrado.' });
+    }
+  } catch (err) {
+    console.error('❌ [BACKEND] Erro ao alterar password:', err);
+    res.status(500).json({ message: 'Erro ao alterar password.' });
+  }
 });
 
 module.exports = router;

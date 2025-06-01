@@ -93,11 +93,25 @@ button:hover {
   font-size: 1.01rem;
   font-weight: 600;
 }
-
 #logoutBtn {
+  background: linear-gradient(90deg, #2a7ae4 70%, #185fa7 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #e3f0fc;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
   width: 80%;
-  margin: 0 auto;
-  display: block;
+  max-width: 80px;
+}
+
+#logoutBtn:hover {
+  background: linear-gradient(90deg, #124a87 70%, #185fa7 100%);
+  transform: scale(1.03);
+  box-shadow: 0 4px 14px #b6d4fa;
 }
 
 @media (max-width: 500px) {

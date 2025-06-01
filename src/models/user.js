@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   role: { type: String, default: 'user' },
-  id: { type: String, unique: true },
   isLoggedIn: { type: Boolean, default: false } // <-- NOVO CAMPO
 });
 

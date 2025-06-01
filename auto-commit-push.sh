@@ -6,3 +6,9 @@ if ! git diff --cached --quiet; then
 else
     echo "Nenhuma alteração para commit."
 fi
+
+
+# git add .
+# git commit -m "Alterações locais antes do rebase"
+# git pull origin main --rebase
+# git push origin main 

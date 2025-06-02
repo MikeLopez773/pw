@@ -9,26 +9,36 @@ body {
 header {
   background-color: #0066cc;
   color: white;
-  padding: 1.5rem;
+  padding: 2rem 1rem;
   text-align: center;
+}
+
+h1 i {
+  margin-right: 10px;
 }
 
 main {
   padding: 2rem;
-  max-width: 900px;
+  max-width: 950px;
   margin: auto;
 }
 
 section {
   background: white;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   margin-bottom: 2rem;
+  transition: transform 0.2s;
+}
+
+section:hover {
+  transform: scale(1.01);
 }
 
 h2 {
   color: #0066cc;
+  margin-bottom: 1rem;
 }
 
 .card {
@@ -36,10 +46,59 @@ h2 {
   justify-content: space-between;
   padding: 1rem 0;
   border-bottom: 1px solid #eee;
+  font-size: 1.1rem;
 }
 
 .card:last-child {
   border-bottom: none;
+}
+
+.cta {
+  text-align: center;
+  background: linear-gradient(120deg, #0066cc, #3399ff);
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+.cta h2 {
+  margin-bottom: 1rem;
+}
+
+.botao {
+  display: inline-block;
+  margin-top: 1rem;
+  background-color: white;
+  color: #0066cc;
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.botao:hover {
+  background-color: #e6f2ff;
+}
+
+.voltar {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.voltar button {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.voltar button:hover {
+  background-color: #004f99;
 }
 
 footer {

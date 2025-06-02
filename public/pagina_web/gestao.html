@@ -1,21 +1,22 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gestão Online</title>
-  <link rel="stylesheet" href="gestao_css.css">
+  <link rel="stylesheet" href="gestao_css.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <header>
-    <h1>Gestão Online</h1>
+    <h1><i class="fa-solid fa-solar-panel"></i> Gestão Online</h1>
     <p>Acompanhe a produção, monitorize o seu sistema e consulte créditos energéticos através da nossa plataforma.</p>
   </header>
 
   <main>
     <section>
-      <h2>Produção Atual</h2>
+      <h2><i class="fa-solid fa-bolt"></i> Produção Atual</h2>
       <div class="card">
         <span>Potência Instantânea:</span>
         <span id="power">-- W</span>
@@ -24,10 +25,11 @@
         <span>Produção Hoje:</span>
         <span id="today">-- kWh</span>
       </div>
+      <canvas id="graficoProducao" height="120"></canvas>
     </section>
 
     <section>
-      <h2>Estado do Sistema</h2>
+      <h2><i class="fa-solid fa-gears"></i> Estado do Sistema</h2>
       <div class="card">
         <span>Status:</span>
         <span id="status">A aguardar dados...</span>
@@ -35,12 +37,22 @@
     </section>
 
     <section>
-      <h2>Créditos Energéticos</h2>
+      <h2><i class="fa-solid fa-coins"></i> Créditos Energéticos</h2>
       <div class="card">
         <span>Total de Créditos:</span>
         <span id="credits">-- €</span>
       </div>
     </section>
+
+    <section class="cta">
+      <h2>🌞 Torne-se mais eficiente</h2>
+      <p>Faça a gestão da sua energia solar com mais facilidade e confiança.</p>
+      <a href="#" class="botao">Obter a Aplicação</a>
+    </section>
+
+    <div class="voltar">
+      <button onclick="history.back()">← Voltar atrás</button>
+    </div>
   </main>
 
   <footer>

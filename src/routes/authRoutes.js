@@ -397,6 +397,27 @@ router.post('/logout', authMiddleware, async (req, res) => {
   }
 });
 
+// Reset de password com nova definida manualmente pelo admin
+router.post('/reset-password/:id', authMiddleware, onlyAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { novaPassword } = req.body;
+
+  if (!novaPassword || novaPassword.length < 4) {
+    return res.status(400).json({ error: 'Password inválida (mínimo 4 caracteres).' });
+  }
+
+  try {
+    const hashed = await bcrypt.hash(novaPassword, 10);
+    await User.findByIdAndUpdate(id, { password: hashed });
+    res.status(200).json({ message: 'Password atualizada com sucesso' });
+  } catch (err) {
+    console.error('Erro ao resetar password:', err);
+    res.status(500).json({ error: 'Erro interno ao atualizar password.' });
+  }
+});
+
+
+
 // Rota para alterar a password (qualquer um pode alterar, desde que tenha o userId e a nova password)
 router.post('/change-password', async (req, res) => {
   const { userId, newPassword } = req.body;
@@ -424,5 +445,7 @@ router.post('/change-password', async (req, res) => {
     res.status(500).json({ message: 'Erro ao alterar password.' });
   }
 });
+
+
 
 module.exports = router;

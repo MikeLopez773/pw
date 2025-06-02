@@ -14,21 +14,21 @@ const produtos = [
     nome: "Painel Solar 350W Monocristalino",
     descricao: "Alta eficiência, ideal para residências. 25 anos de garantia.",
     preco: 199.99,
-    imagem: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+    imagem: "https://contarea.com/wp-content/uploads/2024/03/CONTAREA-GESTAO-E-CONTABILIDADE-FAMALICAO-Paineis-Solares-em-2024-Novidades-no-IVA-e-Beneficios.png"
   },
   {
     id: 2,
     nome: "Painel Solar 410W Bifacial",
     descricao: "Capta energia em ambos os lados. Excelente para telhados planos.",
     preco: 259.99,
-    imagem: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80"
+    imagem: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT86l_HUNNOZxwRs--vcK9_t-XcVa0BW8usJw&s"
   },
   {
     id: 3,
     nome: "Painel Solar 500W Premium",
     descricao: "Máxima produção para grandes instalações. Tecnologia de ponta.",
     preco: 349.99,
-    imagem: "https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=400&q=80"
+    imagem: "https://www.portalsolar.com.br/_next/image?url=https%3A%2F%2Fportalsolar-images.s3.us-east-2.amazonaws.com%2Finstitucional-and-info-production%2Fimages%2Fbdfdb656-1973-4a1c-a526-f997c1c0131b%2Ftudo-sobre-a-eficiencia-do-painel-solar.jpg&w=3840&q=100"
   }
 ];
 
@@ -123,7 +123,7 @@ function renderProdutos() {
           <button onclick="adicionarCarrinho(${produto.id})">Adicionar ao Carrinho</button>
           <button class="botao-quantidade" onclick="aumentarQuantidade(${produto.id})">+</button>        </div>
         <div style="display: flex; gap: 10px; justify-content: center;">
-          <button class="diminuirQuantidade" onclick="diminuirQuantidade(${produto.id})">-</button>
+          <button class="diminuir-Quantidade" onclick="diminuirQuantidade(${produto.id})">-</button>
       </div>
     `;
     produtosDiv.insertAdjacentHTML('beforeend', produtoHTML);

@@ -6,26 +6,64 @@
     <link rel="stylesheet" href="admin_css.css">
     <link rel="icon" type="image/x-icon" href="/source/logotipo.ico">
 </head>
-</head>
 <body>
-    <div class="container">
-        <h2>Criar Utilizador</h2>
-        <form id="createUserForm" class="create-user-form" autocomplete="off">
-            <input type="text" name="username" placeholder="Utilizador" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <select name="role" required>
-                <option value="" disabled selected>Selecione o tipo de utilizador</option>
-                <option value="cliente">Cliente</option>
-                <option value="tecnico">Técnico</option>
-                <option value="gestor">Gestor de Operações</option>
-                <option value="admin">Administrador</option>
-            </select>
-            <button type="submit">Criar Utilizador</button>
-        </form>
-        <div id="message"></div>
-        <button class="back-btn" onclick="window.location.href='admin-dashboard.html'">Voltar ao Início</button>
-    </div>
-    <script src="admin_js.js"></script>
+<div class="container">
+    <h2>Criar Utilizador</h2>
+    <form id="createUserForm" class="create-user-form" autocomplete="off">
+        <input type="text" name="username" placeholder="Utilizador" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <select name="role" required>
+            <option value="" disabled selected>Selecione o tipo de utilizador</option>
+            <option value="cliente">Cliente</option>
+            <option value="tecnico">Técnico</option>
+            <option value="gestor">Gestor</option>
+            <option value="admin">Administrador</option>
+        </select>
+        <button type="submit">Criar Utilizador</button>
+    </form>
+    <div id="message"></div>
+    <button class="back-btn" onclick="window.location.href='admin-dashboard.html'">Voltar ao Início</button>
+</div>
+
+<script src="admin_js.js"></script>
+<script>
+  document.getElementById("createUserForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const username = form.username.value.trim();
+    const email = form.email.value.trim();
+    const password = form.password.value;
+    const role = form.role.value;
+    const token = sessionStorage.getItem('token');
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({ username, email, password, role })
+      });
+
+      const data = await res.json();
+      const msgDiv = document.getElementById("message");
+
+      if (res.ok) {
+        msgDiv.textContent = "Utilizador criado com sucesso!";
+        msgDiv.className = "success";
+        form.reset();
+      } else {
+        msgDiv.textContent = data.error || "Erro ao criar utilizador.";
+        msgDiv.className = "error";
+      }
+    } catch (err) {
+      const msgDiv = document.getElementById("message");
+      msgDiv.textContent = "Erro de ligação ao servidor.";
+      msgDiv.className = "error";
+    }
+  });
+</script>
 </body>
 </html>

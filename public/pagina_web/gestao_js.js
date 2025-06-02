@@ -1,24 +1,64 @@
+const historico = [];
+
+let grafico;
+function inicializarGrafico() {
+  const ctx = document.getElementById('graficoProducao').getContext('2d');
+  grafico = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Produção (W)',
+        data: [],
+        borderColor: '#0066cc',
+        backgroundColor: 'rgba(0, 102, 204, 0.1)',
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
+
+function atualizarGrafico(valor) {
+  const timestamp = new Date().toLocaleTimeString();
+  historico.push({ tempo: timestamp, valor });
+
+  if (historico.length > 10) historico.shift();
+
+  grafico.data.labels = historico.map(d => d.tempo);
+  grafico.data.datasets[0].data = historico.map(d => d.valor);
+  grafico.update();
+}
+
 async function atualizarDados() {
   try {
-    // Faz uma chamada à API para buscar os dados
-    const res = await fetch('http://localhost:4000/'); // Substitui pela URL da tua API
-    if (!res.ok) {
-      throw new Error('Erro ao buscar dados da API');
-    }
+    const res = await fetch('http://localhost:4000/');
+    if (!res.ok) throw new Error('Erro ao buscar dados da API');
 
     const data = await res.json();
+    const valor = data.value;
 
-    // Atualiza os elementos com os dados reais
-    document.getElementById('power').innerText = `${data.value} W`;
-    document.getElementById('today').innerText = `${(data.value / 100).toFixed(2)} kWh`; // Exemplo de cálculo
+    document.getElementById('power').innerText = `${valor} W`;
+    document.getElementById('today').innerText = `${(valor / 100).toFixed(2)} kWh`;
     document.getElementById('status').innerText = 'Sistema operacional';
-    document.getElementById('credits').innerText = `${(data.value / 10).toFixed(2)} €`; // Exemplo de cálculo
+    document.getElementById('credits').innerText = `${(valor / 10).toFixed(2)} €`;
+
+    atualizarGrafico(valor);
   } catch (error) {
     console.error('Erro ao atualizar dados:', error);
     document.getElementById('status').innerText = 'Erro ao obter dados';
   }
 }
 
-// Atualiza os dados ao carregar a página e a cada 5 segundos
-atualizarDados();
-setInterval(atualizarDados, 5000);
+window.onload = () => {
+  inicializarGrafico();
+  atualizarDados();
+  setInterval(atualizarDados, 5000);
+};

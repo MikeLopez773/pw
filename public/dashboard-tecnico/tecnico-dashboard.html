@@ -5,10 +5,9 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Dashboard Técnico</title>
+  <title>Dashboard Técnico Unificado</title>
   <link rel="stylesheet" href="tecnico_css.css">
   <link rel="icon" type="image/x-icon" href="/source/logotipo.ico">
-</head>
   <script defer src="tecnico_js.js"></script>
 </head>
 <body>
@@ -17,13 +16,23 @@
     <div id="message"></div>
 
     <nav class="dashboard-nav">
-      <button onclick="window.location.href='gestao-utilizadores.html'">Ver Utilizadores</button>
       <button onclick="window.location.href='../pagina_web/front.html'">Terminar Sessão</button>
     </nav>
 
+    <!-- Secção de Painéis Pendentes -->
+    <section class="pending-panels-section">
+      <h2>Painéis Pendentes de Certificação</h2>
+      <div class="search-bar">
+        <input type="text" id="filterPendingPanels" placeholder="Filtrar por ID ou nome do cliente...">
+      </div>
+      <div id="pendingPanels" class="panels-container">
+        <p>Carregando painéis pendentes...</p>
+      </div>
+    </section>
+
+    <!-- Secção de Certificação de Painel -->
     <section class="certification-section">
       <h2>Certificar Painel Solar</h2>
-
       <form id="searchUserForm">
         <div class="form-group">
           <label for="searchUser">ID ou Nome do Utilizador:</label>
@@ -34,17 +43,23 @@
         </div>
         <button type="submit">Pesquisar Utilizador</button>
       </form>
-
       <div id="userResult" class="user-info"></div>
-
-      <form id="certificateForm">
-        <input type="hidden" name="panelId" value="O_ID_DO_PAINEL">
-        <button type="submit">Certificar</button>
+      <form id="certificateForm" style="display:none;">
+        <input type="hidden" name="panelId" id="panelId">
+        <input type="hidden" name="userId" id="userId">
+        <input type="hidden" name="username" id="username">
+        <label for="certificate">PDF do Certificado:</label>
+        <input type="file" name="certificate" id="certificate" accept="application/pdf" required>
+        <button type="submit" id="certifyBtn">Certificar</button>
       </form>
     </section>
 
+    <!-- Secção de Painéis Certificados -->
     <section class="panels-section">
       <h2>Painéis Certificados</h2>
+      <div class="search-bar">
+        <input type="text" id="filterCertifiedPanels" placeholder="Filtrar por ID ou nome do cliente...">
+      </div>
       <div id="certifiedPanels" class="panels-container">
         <p>Carregando painéis certificados...</p>
       </div>

@@ -25,3 +25,12 @@ exports.monitorPanel = async (req, res) => {
   // Implementa aqui a tua lógica de monitorização
   res.json({ message: 'Monitorização não implementada.' });
 };
+
+// Certificar painel
+exports.certificatePanel = async (req, res) => {
+  try {
+    // ... lógica ...
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao certificar painel.' });
+  }
+};

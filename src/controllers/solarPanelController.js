@@ -116,7 +116,10 @@ async function listCertifiedPanels(req, res) {
   try {
     const panels = await SolarPanel.find({ 
       validated: true,
-      certificate: { $exists: true } 
+      $or: [
+        { certificate: { $exists: true, $ne: null } },
+        { certificateUrl: { $exists: true, $ne: null } }
+      ]
     }).sort({ certificationDate: -1 });
     
     res.json({ panels });
@@ -126,10 +129,22 @@ async function listCertifiedPanels(req, res) {
   }
 }
 
+// Lista um painel solar pelo ID
+async function listPanelById(req, res) {
+  try {
+    const panel = await SolarPanel.findById(req.params.id);
+    if (!panel) return res.status(404).json({ message: 'Painel não encontrado.' });
+    res.json(panel);
+  } catch (err) {
+    res.status(500).json({ message: 'Erro ao procurar painel.' });
+  }
+}
+
 module.exports = {
   registerPanel,
   listPanels,
   validatePanel,
   certificatePanel,
   listCertifiedPanels,
+  listPanelById,
 };

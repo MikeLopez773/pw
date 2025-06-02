@@ -4,6 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const multer = require('multer');
 
 // Configurar dotenv para carregar variáveis de ambiente do ficheiro .env na raiz do projeto
 dotenv.config();
@@ -24,6 +25,9 @@ const app = express();
 
 // Ler a porta da variável de ambiente ou usar 3000 por defeito
 const PORT = process.env.PORT || 3000;
+
+// Configurar o multer para o upload de ficheiros
+const upload = multer({ dest: 'uploads/' }); // ou configura como preferires
 
 // Conectar à base de dados antes de iniciar o servidor
 connectDB()

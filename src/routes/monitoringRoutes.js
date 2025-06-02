@@ -69,4 +69,16 @@ router.get('/stats/:idClient', auth, onlyGestor, async (req, res) => {
   }
 });
 
+router.get('/panels/:id', auth, async (req, res) => {
+  try {
+    const panel = await SolarPanel.findById(req.params.id);
+    if (!panel) {
+      return res.status(404).json({ message: 'Painel solar não encontrado.' });
+    }
+    res.json(panel);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao obter painel solar.' });
+  }
+});
+
 module.exports = router;

@@ -5,7 +5,6 @@ function redirectLogin() {
 
 document.addEventListener('DOMContentLoaded', () => {
   const token = sessionStorage.getItem('token');
-  
   if (!token) return redirectLogin();
 
   let payload;
@@ -17,190 +16,227 @@ document.addEventListener('DOMContentLoaded', () => {
     return redirectLogin();
   }
 
+  // --- Painéis Pendentes ---
+  const pendingPanelsContainer = document.getElementById('pendingPanels');
+  const filterPendingPanels = document.getElementById('filterPendingPanels');
+  let allPendingPanels = [];
+
+  async function loadPendingPanels() {
+    if (!pendingPanelsContainer) return;
+    try {
+      const res = await fetch('/api/panels/pending', {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      if (res.ok && data.panels) {
+        allPendingPanels = data.panels;
+        displayPendingPanels(allPendingPanels);
+      } else {
+        pendingPanelsContainer.innerHTML = '<p>Erro ao carregar painéis pendentes.</p>';
+      }
+    } catch (error) {
+      pendingPanelsContainer.innerHTML = '<p>Erro ao carregar painéis pendentes.</p>';
+    }
+  }
+
+  function displayPendingPanels(panels) {
+    if (!pendingPanelsContainer) return;
+    if (!panels.length) {
+      pendingPanelsContainer.innerHTML = '<p>Nenhum painel pendente encontrado.</p>';
+      return;
+    }
+    pendingPanelsContainer.innerHTML = panels.map(panel => `
+      <div class="panel-card pending clickable" onclick="certifyPanel('${panel._id}', '${panel.user ? panel.user._id : ''}', '${panel.user ? panel.user.username : 'N/A'}')">
+        <div class="panel-header">
+          <h4>📋 Painel ${panel._id.substring(panel._id.length - 8)}</h4>
+          <span class="status-badge pending">Pendente</span>
+        </div>
+        <div class="panel-info">
+          <p><strong>👤 Cliente:</strong> ${panel.user ? panel.user.username : 'N/A'}</p>
+          <p><strong>📍 Localização:</strong> ${panel.location}</p>
+          <p><strong>⚡ Capacidade:</strong> ${panel.capacity} kW</p>
+          <p><strong>📅 Data de Instalação:</strong> ${new Date(panel.installationDate).toLocaleDateString('pt-PT')}</p>
+        </div>
+        <div class="panel-actions">
+          <p class="click-hint">🖱️ Clique para certificar este painel</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  if (filterPendingPanels) {
+    filterPendingPanels.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const filtered = allPendingPanels.filter(panel =>
+        panel._id.toLowerCase().includes(query) ||
+        (panel.user && panel.user.username && panel.user.username.toLowerCase().includes(query))
+      );
+      displayPendingPanels(filtered);
+    });
+  }
+
+  // --- Painéis Certificados ---
+  const certifiedPanelsContainer = document.getElementById('certifiedPanels');
+  const filterCertifiedPanels = document.getElementById('filterCertifiedPanels');
+  let allCertifiedPanels = [];
+
+  async function loadCertifiedPanels() {
+    if (!certifiedPanelsContainer) return;
+    try {
+      const res = await fetch('/api/panels/certified', {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      if (res.ok && data.panels) {
+        allCertifiedPanels = data.panels;
+        displayCertifiedPanels(allCertifiedPanels);
+      } else {
+        certifiedPanelsContainer.innerHTML = '<p>Erro ao carregar painéis certificados.</p>';
+      }
+    } catch (error) {
+      certifiedPanelsContainer.innerHTML = '<p>Erro ao carregar painéis certificados.</p>';
+    }
+  }
+
+  function displayCertifiedPanels(panels) {
+    if (!certifiedPanelsContainer) return;
+    if (!panels.length) {
+      certifiedPanelsContainer.innerHTML = '<p>Nenhum painel certificado encontrado.</p>';
+      return;
+    }
+    certifiedPanelsContainer.innerHTML = panels.map(panel => `
+      <div class="panel-card">
+        <h4>Painel ${panel.panelId || panel._id}</h4>
+        <p><strong>Cliente:</strong> ${panel.username}</p>
+        <p><strong>Data de Certificação:</strong> ${panel.certificationDate ? new Date(panel.certificationDate).toLocaleDateString() : 'N/A'}</p>
+        <p><strong>Status:</strong> Certificado</p>
+      </div>
+    `).join('');
+  }
+
+  if (filterCertifiedPanels) {
+    filterCertifiedPanels.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const filtered = allCertifiedPanels.filter(panel =>
+        (panel.panelId && panel.panelId.toLowerCase().includes(query)) ||
+        (panel._id && panel._id.toLowerCase().includes(query)) ||
+        (panel.username && panel.username.toLowerCase().includes(query))
+      );
+      displayCertifiedPanels(filtered);
+    });
+  }
+
+  // --- Certificação de Painel (via utilizador ou painel pendente) ---
   const searchForm = document.getElementById('searchUserForm');
   const certForm = document.getElementById('certificateForm');
   const userResult = document.getElementById('userResult');
 
-  // VERIFICAR SE VEIO DA PÁGINA DE GESTÃO COM DADOS PRÉ-SELECIONADOS
-  function checkPreselectedData() {
-    const selectedPanelId = sessionStorage.getItem('selectedPanelId');
-    const selectedUserId = sessionStorage.getItem('selectedUserId');
-    const selectedUsername = sessionStorage.getItem('selectedUsername');
-    
-    if (selectedPanelId && selectedUserId && selectedUsername) {
-      console.log('🎯 Dados pré-selecionados encontrados:', {
-        panelId: selectedPanelId,
-        userId: selectedUserId,
-        username: selectedUsername
-      });
-      
-      // Preencher automaticamente os campos
-      document.getElementById('panelId').value = selectedPanelId;
-      document.getElementById('userId').value = selectedUserId;
-      document.getElementById('username').value = selectedUsername;
-      
-      // Mostrar informações do usuário
-      userResult.innerHTML = `
-        <div class="user-found auto-selected">
-          <h3>🎯 Painel Selecionado para Certificação:</h3>
-          <p><strong>ID do Painel:</strong> ${selectedPanelId}</p>
-          <p><strong>Nome do Cliente:</strong> ${selectedUsername}</p>
-          <p><strong>ID do Cliente:</strong> ${selectedUserId}</p>
-          <div class="auto-selected-note">
-            <small>ℹ️ Dados preenchidos automaticamente da página de gestão</small>
-          </div>
-        </div>
-      `;
-      
-      // Mostrar o formulário de certificação
-      certForm.style.display = 'block';
-      
-      // Focar no campo de upload do certificado
-      document.getElementById('certificate').focus();
-      
-      // Limpar os dados do sessionStorage
-      sessionStorage.removeItem('selectedPanelId');
-      sessionStorage.removeItem('selectedUserId');
-      sessionStorage.removeItem('selectedUsername');
-      
-      // Scrollar para a seção de certificação
-      document.getElementById('certificateForm').scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'center' 
-      });
-    }
-  }
-
-  // Pesquisar utilizador (método manual)
-  searchForm.onsubmit = async function (e) {
-    e.preventDefault();
-    const query = document.getElementById('searchUser').value.trim();
-    if (!query) return;
-
-    try {
-      const res = await fetch(`/api/auth/user/search?q=${encodeURIComponent(query)}`, {
-        headers: { 'Authorization': token }
-      });
-
-      const data = await res.json();
-      if (res.ok && data.user) {
-        userResult.innerHTML = `
-          <div class="user-found">
-            <h3>Utilizador Encontrado:</h3>
-            <p><strong>Nome:</strong> ${data.user.username}</p>
-            <p><strong>ID:</strong> ${data.user._id}</p>
-            <p><strong>Email:</strong> ${data.user.email}</p>
-          </div>
-        `;
-        document.getElementById('userId').value = data.user._id;
-        document.getElementById('username').value = data.user.username;
-        // Limpar o panelId para pesquisa manual
-        document.getElementById('panelId').value = '';
-        certForm.style.display = 'block';
-      } else {
-        userResult.innerHTML = `<div class="user-not-found">Cliente não encontrado.</div>`;
-        certForm.style.display = 'none';
-      }
-    } catch (error) {
-      console.error('Erro ao pesquisar utilizador:', error);
-      userResult.innerHTML = `<div class="error">Erro ao pesquisar utilizador.</div>`;
-    }
+  window.certifyPanel = function(panelId, userId, username) {
+    document.getElementById('panelId').value = panelId;
+    document.getElementById('userId').value = userId;
+    document.getElementById('username').value = username;
+    userResult.innerHTML = `
+      <div class="user-found auto-selected">
+        <h3>🎯 Painel Selecionado para Certificação:</h3>
+        <p><strong>ID do Painel:</strong> ${panelId}</p>
+        <p><strong>Nome do Cliente:</strong> ${username}</p>
+        <p><strong>ID do Cliente:</strong> ${userId}</p>
+      </div>
+    `;
+    certForm.style.display = 'block';
+    document.getElementById('certificate').focus();
+    certForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
-  // Certificar painel
-  certForm.onsubmit = async function (e) {
-    e.preventDefault();
-    const panelId = this.panelId.value.trim();
-    const userId = this.userId.value.trim();
-    const username = this.username.value.trim();
-    const file = this.certificate.files[0];
-
-    if (!file || file.type !== 'application/pdf') {
-      showMessage('Por favor, selecione um ficheiro PDF.', 'error');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('panelId', panelId);
-    formData.append('userId', userId);
-    formData.append('username', username);
-    formData.append('certificate', file);
-
-    try {
-      const res = await fetch('/api/panels/certificate', {
-        method: 'POST',
-        headers: { 'Authorization': token },
-        body: formData
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        showMessage(data.message || 'Painel certificado com sucesso!', 'success');
-        this.reset();
-        certForm.style.display = 'none';
-        userResult.innerHTML = '';
-        loadCertifiedPanels();
-      } else {
-        showMessage(data.message || 'Erro ao certificar painel.', 'error');
+  if (searchForm) {
+    searchForm.onsubmit = async function (e) {
+      e.preventDefault();
+      const query = document.getElementById('searchUser').value.trim();
+      if (!query) {
+        showMessage('Por favor, insira um nome ou ID para pesquisar.', 'error');
+        return;
       }
-    } catch (error) {
-      console.error('Erro ao certificar painel:', error);
-      showMessage('Erro ao certificar painel.', 'error');
-    }
-  };
-
-  // Nova implementação para geração de certificado
-  document.getElementById('certificateForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const panelId = e.target.panelId.value;
-    console.log('📄 [FRONTEND] A gerar certificado para o painel:', panelId);
-    const res = await fetch('/api/panels/certificate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ panelId })
-    });
-    const data = await res.json();
-    if (res.ok) {
-      showMessage('Certificado gerado com sucesso!', 'success');
-    } else {
-      showMessage(data.message || 'Erro ao gerar certificado', 'error');
-    }
-  });
-
-  // Carregar painéis certificados
-  async function loadCertifiedPanels() {
-    try {
-      console.log('🚀 Fazendo requisição com token:', token);
-      
-      const res = await fetch('/api/panels/certified', {
-        headers: { 'Authorization': token }
-      });
-      
-      console.log('📊 Status da resposta:', res.status);
-      
-      const data = await res.json();
-      const container = document.getElementById('certifiedPanels');
-      
-      if (res.ok && data.panels && data.panels.length) {
-        container.innerHTML = data.panels.map(panel => `
-          <div class="panel-card">
-            <h4>Painel ${panel.panelId}</h4>
-            <p><strong>Cliente:</strong> ${panel.username}</p>
-            <p><strong>Data de Certificação:</strong> ${new Date(panel.createdAt).toLocaleDateString()}</p>
-            <p><strong>Status:</strong> Certificado</p>
-          </div>
-        `).join('');
-      } else {
-        console.log('❌ Erro na resposta:', data);
-        container.innerHTML = '<p>Nenhum painel certificado encontrado.</p>';
+      try {
+        const authToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+        const res = await fetch(`/api/auth/user/search?q=${encodeURIComponent(query)}`, {
+          headers: {
+            'Authorization': authToken,
+            'Cache-Control': 'no-cache'
+          }
+        });
+        const data = await res.json();
+        let user = null;
+        if (Array.isArray(data)) {
+          if (data.length > 0) user = data[0];
+        } else if (data && typeof data === 'object' && data._id) {
+          user = data;
+        }
+        if (user) {
+          userResult.innerHTML = `
+            <div class="user-found">
+              <h3>✅ Utilizador Encontrado:</h3>
+              <p><strong>Nome:</strong> ${user.username}</p>
+              <p><strong>ID:</strong> ${user._id}</p>
+              <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+              <p><strong>Função:</strong> ${user.role}</p>
+            </div>
+          `;
+          document.getElementById('userId').value = user._id;
+          document.getElementById('username').value = user.username;
+          document.getElementById('panelId').value = '';
+          certForm.style.display = 'block';
+          showMessage('Utilizador encontrado com sucesso!', 'success');
+        } else {
+          userResult.innerHTML = `<div class="user-not-found">❌ Utilizador "${query}" não encontrado.</div>`;
+          certForm.style.display = 'none';
+          showMessage('Utilizador não encontrado.', 'error');
+        }
+      } catch (error) {
+        userResult.innerHTML = `<div class="error">❌ Erro de conexão.</div>`;
+        showMessage('Erro ao pesquisar utilizador.', 'error');
       }
-    } catch (error) {
-      console.error('Erro ao carregar painéis:', error);
-      document.getElementById('certifiedPanels').innerHTML = '<p>Erro ao carregar painéis.</p>';
-    }
+    };
   }
 
-  // Função para mostrar mensagens
+  if (certForm) {
+    certForm.onsubmit = async function (e) {
+      e.preventDefault();
+      const panelId = this.panelId.value.trim();
+      const userId = this.userId.value.trim();
+      const username = this.username.value.trim();
+      const file = this.certificate.files[0];
+      if (!file || file.type !== 'application/pdf') {
+        showMessage('Por favor, selecione um ficheiro PDF.', 'error');
+        return;
+      }
+      const formData = new FormData();
+      formData.append('panelId', panelId);
+      formData.append('userId', userId);
+      formData.append('username', username);
+      formData.append('certificate', file);
+      try {
+        const res = await fetch('/api/panels/certificate', {
+          method: 'POST',
+          headers: { 'Authorization': token },
+          body: formData
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showMessage(data.message || 'Painel certificado com sucesso!', 'success');
+          this.reset();
+          certForm.style.display = 'none';
+          userResult.innerHTML = '';
+          loadCertifiedPanels();
+          loadPendingPanels();
+        } else {
+          showMessage(data.message || 'Erro ao certificar painel.', 'error');
+        }
+      } catch (error) {
+        showMessage('Erro ao certificar painel.', 'error');
+      }
+    };
+  }
+
   function showMessage(msg, type = 'info') {
     const messageEl = document.getElementById('message');
     if (messageEl) {
@@ -213,28 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Inicializar
-  checkPreselectedData(); // VERIFICAR dados pré-selecionados primeiro
+  // Inicialização
+  loadPendingPanels();
   loadCertifiedPanels();
 });
-
-// Implementação do timeout de inatividade (15 minutos)
-function updateLastActivity() {
-  sessionStorage.setItem('lastActivity', Date.now());
-}
-
-function checkInactivity() {
-  const lastActivity = Number(sessionStorage.getItem('lastActivity'));
-  if (Date.now() - lastActivity > 900000) { // 900000 ms = 15 minutos
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('lastActivity');
-    window.location.href = '../login_web/login.html';
-  }
-}
-
-// Monitora atividades do usuário e atualiza o timestamp
-['mousemove', 'keydown', 'click', 'scroll'].forEach(event =>
-  window.addEventListener(event, updateLastActivity)
-);
-updateLastActivity();
-setInterval(checkInactivity, 60000);
